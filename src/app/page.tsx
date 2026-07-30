@@ -4,6 +4,7 @@ import { Suspense } from 'react';
 import HeroClient from './(public)/HeroClient';
 import { FeaturesSection } from '@/components/public/FeaturesSection';
 import { WhyWeNeedSection } from '@/components/public/WhyWeNeedSection';
+import { TestimonialsSection } from '@/components/public/TestimonialsSection';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 import { ArrowRight } from 'lucide-react';
@@ -111,8 +112,9 @@ export default function HomePage() {
         <HeroClient />
       </Suspense>
       <StatsBar />
-      <WhyWeNeedSection />
       <FeaturesSection />
+      <TestimonialsSection />
+      <WhyWeNeedSection />
       <CTASection />
     </main>
   );
