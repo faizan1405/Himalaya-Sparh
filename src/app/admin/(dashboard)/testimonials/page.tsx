@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { AdminListPanel } from '@/components/admin/AdminListPanel';
+import { Star } from 'lucide-react';
 
 interface Testimonial {
   _id: string;
@@ -28,34 +30,71 @@ export default function TestimonialsPage() {
     } catch {}
   };
 
+  const updateField = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+
   return (
-    <div className="max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">Testimonials</h1>
-        <p className="text-navy/60">Manage customer testimonials and reviews.</p>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 p-6 mb-8">
+    <AdminListPanel
+      title="Testimonials"
+      description="Manage customer testimonials and reviews."
+      icon={<Star className="w-6 h-6" />}
+      headers={['Name', 'Type', 'Rating', 'Verified']}
+      emptyMessage="No testimonials yet."
+      form={
         <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
-          <input placeholder="Customer Name" value={form.customerName} onChange={e => setForm({...form, customerName: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="City" value={form.city} onChange={e => setForm({...form, city: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="State" value={form.state} onChange={e => setForm({...form, state: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <select value={form.reviewType} onChange={e => setForm({...form, reviewType: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg">
-            <option value="written">Written</option><option value="video">Video</option>
-          </select>
-          <input type="number" min="1" max="5" placeholder="Rating" value={form.rating} onChange={e => setForm({...form, rating: parseInt(e.target.value)})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Purchase Type" value={form.purchaseType} onChange={e => setForm({...form, purchaseType: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <textarea placeholder="Review Text" value={form.reviewText} onChange={e => setForm({...form, reviewText: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg sm:col-span-2" rows={3} />
-          <input placeholder="Video URL" value={form.videoUrl} onChange={e => setForm({...form, videoUrl: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <button type="submit" className="btn-primary sm:col-span-2">Add Testimonial</button>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Customer Name *</label>
+            <input placeholder="Customer name" value={form.customerName} onChange={e => updateField('customerName', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">City</label>
+            <input placeholder="City" value={form.city} onChange={e => updateField('city', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">State</label>
+            <input placeholder="State" value={form.state} onChange={e => updateField('state', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Review Type</label>
+            <select value={form.reviewType} onChange={e => updateField('reviewType', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all">
+              <option value="written">Written</option>
+              <option value="video">Video</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Rating (1-5)</label>
+            <input type="number" min="1" max="5" placeholder="5" value={form.rating} onChange={e => updateField('rating', parseInt(e.target.value))} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Purchase Type</label>
+            <input placeholder="e.g. Online, Retail" value={form.purchaseType} onChange={e => updateField('purchaseType', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Review Text</label>
+            <textarea placeholder="Customer review..." value={form.reviewText} onChange={e => updateField('reviewText', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 resize-none text-navy transition-all" rows={3} />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Video URL</label>
+            <input placeholder="https://youtube.com/..." value={form.videoUrl} onChange={e => updateField('videoUrl', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <button type="submit" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-aurora/20 hover:-translate-y-0.5 transition-all duration-300 text-sm sm:col-span-2">
+            <Star className="w-4 h-4" />
+            Add Testimonial
+          </button>
         </form>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-ice/50"><tr><th className="px-4 py-3 text-left">Name</th><th className="px-4 py-3 text-left">Type</th><th className="px-4 py-3 text-left">Rating</th><th className="px-4 py-3 text-left">Verified</th></tr></thead>
-          <tbody>{data.map(t => (<tr key={t._id} className="border-t border-silver/10"><td className="px-4 py-3 text-navy">{t.customerName}</td><td className="px-4 py-3 text-navy/70">{t.reviewType}</td><td className="px-4 py-3 text-navy/70">{t.rating}/5</td><td className="px-4 py-3 text-navy/70">{t.isVerified ? 'Yes' : 'No'}</td></tr>))}</tbody>
-        </table>
-        {data.length === 0 && <p className="p-6 text-center text-navy/50">No testimonials yet.</p>}
-      </div>
-    </div>
+      }
+    >
+      {data.map((t) => (
+        <tr key={t._id} className="border-t border-silver/10 hover:bg-ice/20 transition-colors">
+          <td className="px-6 py-3.5 text-navy font-medium">{t.customerName}</td>
+          <td className="px-6 py-3.5 text-navy/70 capitalize">{t.reviewType}</td>
+          <td className="px-6 py-3.5 text-navy/70">{t.rating}/5</td>
+          <td className="px-6 py-3.5">
+            <span className={`inline-flex px-2.5 py-1 rounded-full text-xs font-medium ${t.isVerified ? 'bg-green-50 text-green-600' : 'bg-silver/20 text-navy/50'}`}>
+              {t.isVerified ? 'Yes' : 'No'}
+            </span>
+          </td>
+        </tr>
+      ))}
+    </AdminListPanel>
   );
 }

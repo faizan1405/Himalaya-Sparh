@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { AdminListPanel } from '@/components/admin/AdminListPanel';
+import { Wrench } from 'lucide-react';
 
 interface Component {
   _id: string;
@@ -37,31 +39,59 @@ export default function ComponentsPage() {
     } catch {}
   };
 
+  const updateField = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+
   return (
-    <div className="max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">Device Components</h1>
-        <p className="text-navy/60">Manage components used in the device.</p>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 p-6 mb-8">
+    <AdminListPanel
+      title="Device Components"
+      description="Manage the natural materials and components used in the device."
+      icon={<Wrench className="w-6 h-6" />}
+      headers={['Name', 'Purpose', 'Order']}
+      emptyMessage="No components yet."
+      form={
         <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
-          <input placeholder="Component Name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Purpose" value={form.purpose} onChange={e => setForm({...form, purpose: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg sm:col-span-2" rows={2} />
-          <input placeholder="Characteristics" value={form.characteristics} onChange={e => setForm({...form, characteristics: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Origin / Source" value={form.origin} onChange={e => setForm({...form, origin: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Image URL" value={form.image} onChange={e => setForm({...form, image: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input type="number" placeholder="Display Order" value={form.order} onChange={e => setForm({...form, order: parseInt(e.target.value)})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <button type="submit" className="btn-primary sm:col-span-2">Add Component</button>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Component Name *</label>
+            <input placeholder="e.g. Himalayan Crystal" value={form.name} onChange={e => updateField('name', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Purpose *</label>
+            <input placeholder="Brief purpose" value={form.purpose} onChange={e => updateField('purpose', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Description</label>
+            <textarea placeholder="Detailed description..." value={form.description} onChange={e => updateField('description', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 resize-none text-navy transition-all" rows={2} />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Characteristics</label>
+            <input placeholder="Key characteristics" value={form.characteristics} onChange={e => updateField('characteristics', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Origin / Source</label>
+            <input placeholder="Origin location" value={form.origin} onChange={e => updateField('origin', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Image URL</label>
+            <input placeholder="https://..." value={form.image} onChange={e => updateField('image', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Display Order</label>
+            <input type="number" placeholder="0" value={form.order || ''} onChange={e => updateField('order', parseInt(e.target.value))} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <button type="submit" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-aurora/20 hover:-translate-y-0.5 transition-all duration-300 text-sm sm:col-span-2">
+            <Wrench className="w-4 h-4" />
+            Add Component
+          </button>
         </form>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-ice/50"><tr><th className="px-4 py-3 text-left">Name</th><th className="px-4 py-3 text-left">Purpose</th><th className="px-4 py-3 text-left">Order</th></tr></thead>
-          <tbody>{components.map((c) => (<tr key={c._id} className="border-t border-silver/10"><td className="px-4 py-3 text-navy">{c.name}</td><td className="px-4 py-3 text-navy/70">{c.purpose}</td><td className="px-4 py-3 text-navy/70">{c.order}</td></tr>))}</tbody>
-        </table>
-        {components.length === 0 && <p className="p-8 text-center text-navy/50">No components yet.</p>}
-      </div>
-    </div>
+      }
+    >
+      {components.map((c) => (
+        <tr key={c._id} className="border-t border-silver/10 hover:bg-ice/20 transition-colors">
+          <td className="px-6 py-3.5 text-navy font-medium">{c.name}</td>
+          <td className="px-6 py-3.5 text-navy/70">{c.purpose}</td>
+          <td className="px-6 py-3.5 text-navy/70">{c.order}</td>
+        </tr>
+      ))}
+    </AdminListPanel>
   );
 }

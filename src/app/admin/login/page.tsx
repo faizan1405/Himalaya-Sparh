@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { motion } from 'framer-motion';
+import { Shield } from 'lucide-react';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -38,48 +39,62 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-ice via-white to-white flex items-center justify-center p-4">
+    <div className="min-h-screen bg-gradient-to-br from-navy via-midnight to-navy flex items-center justify-center p-4 relative overflow-hidden">
+      {/* Decorative orbs */}
+      <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-aurora/10 rounded-full blur-3xl" />
+      <div className="absolute bottom-1/4 right-1/4 w-80 h-80 bg-aqua/10 rounded-full blur-3xl" />
+
       <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        animate={{ opacity: 1, y: 0 }}
-        className="w-full max-w-md"
+        initial={{ opacity: 0, y: 30, scale: 0.95 }}
+        animate={{ opacity: 1, y: 0, scale: 1 }}
+        transition={{ duration: 0.5 }}
+        className="w-full max-w-md relative z-10"
       >
-        <div className="bg-white rounded-3xl shadow-xl border border-silver/20 p-8 lg:p-10">
+        <div className="bg-white/90 backdrop-blur-xl rounded-3xl shadow-2xl shadow-navy/20 border border-silver/10 p-8 lg:p-10">
           <div className="text-center mb-8">
-            <div className="w-16 h-16 bg-gradient-to-br from-blue-500 to-navy rounded-2xl flex items-center justify-center mx-auto mb-4">
-              <span className="text-white font-bold text-2xl font-heading">HS</span>
-            </div>
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ delay: 0.2, type: 'spring' }}
+              className="w-16 h-16 bg-gradient-to-br from-aurora to-aqua rounded-2xl flex items-center justify-center mx-auto mb-4 shadow-lg shadow-aurora/30"
+            >
+              <Shield className="w-8 h-8 text-white" />
+            </motion.div>
             <h1 className="text-2xl font-heading font-bold text-navy">Admin Panel</h1>
-            <p className="text-navy/60 text-sm mt-2">Himalya Sparsh</p>
+            <p className="text-navy/50 text-sm mt-1">Himalya Sparsh</p>
           </div>
 
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-600 text-sm rounded-xl p-3 mb-6">
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="bg-red-50/80 border border-red-200/60 text-red-600 text-sm rounded-xl p-3 mb-6"
+            >
               {error}
-            </div>
+            </motion.div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-medium text-navy mb-2">Email</label>
+              <label className="block text-xs text-navy/70 mb-1.5 font-medium">Email</label>
               <input
                 type="email"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all"
                 placeholder="admin@himalyaspersh.com"
               />
             </div>
 
             <div>
-              <label className="block text-sm font-medium text-navy mb-2">Password</label>
+              <label className="block text-xs text-navy/70 mb-1.5 font-medium">Password</label>
               <input
                 type="password"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 required
-                className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full px-4 py-3 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all"
                 placeholder="••••••••"
               />
             </div>
@@ -87,13 +102,13 @@ export default function AdminLoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="btn-primary w-full disabled:opacity-50"
+              className="w-full inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-aurora/30 hover:-translate-y-0.5 transition-all duration-300 text-sm disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:hover:shadow-none"
             >
               {loading ? 'Signing in...' : 'Sign In'}
             </button>
           </form>
 
-          <p className="text-center text-navy/40 text-xs mt-6">
+          <p className="text-center text-navy/30 text-xs mt-6">
             Admin access only
           </p>
         </div>

@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { AdminContentEditor } from '@/components/admin/AdminContentEditor';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { Settings } from 'lucide-react';
 
 export default function SettingsPage() {
   const [data, setData] = useState<any>(null);
@@ -22,12 +25,13 @@ export default function SettingsPage() {
   };
 
   return (
-    <div className="max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">Site Settings</h1>
-        <p className="text-navy/60">Manage global site settings, contact information, and social links.</p>
-      </div>
-      {message && <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6">{message}</div>}
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="Site Settings"
+        description="Manage global site settings, contact information, and social links."
+        icon={<Settings className="w-6 h-6" />}
+        successMessage={message || undefined}
+      />
       <AdminContentEditor data={data} contentType="settings" onSave={handleSave} saving={saving} />
     </div>
   );

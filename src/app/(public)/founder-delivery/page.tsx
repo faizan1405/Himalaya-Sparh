@@ -2,91 +2,155 @@
 
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { Section, SectionHeading, CTAButton } from '@/components/public/Sections';
-import { Phone, Mail, MessageCircle, MapPin } from 'lucide-react';
+import { Section, SectionHeading, Card } from '@/components/public/Sections';
+import { Phone, Mail, MessageCircle, MapPin, CheckCircle, Truck, Clock, Shield } from 'lucide-react';
 import FounderDeliveryForm from '@/components/public/FounderDeliveryForm';
+
+const features = [
+  { icon: Truck, title: 'Personal Oversight', desc: 'The founder personally oversees every interstate delivery.' },
+  { icon: Shield, title: 'Safe Packaging', desc: 'Premium packaging ensures your device arrives in perfect condition.' },
+  { icon: Clock, title: 'Scheduled Delivery', desc: 'Choose a delivery date that works best for you.' },
+  { icon: CheckCircle, title: 'Full Tracking', desc: 'Real-time tracking so you always know where your order is.' },
+];
+
+const steps = [
+  { num: '01', title: 'Request Delivery', desc: 'Fill out the form with your details and preferred delivery date.' },
+  { num: '02', title: 'Confirmation', desc: 'Our team will confirm availability and schedule the delivery.' },
+  { num: '03', title: 'Delivery', desc: 'Receive your device with full tracking and founder\'s personal guarantee.' },
+];
 
 export default function FounderDeliveryPage() {
   const [settings, setSettings] = useState<any>(null);
+  const [settingsError, setSettingsError] = useState<string | null>(null);
 
   useEffect(() => {
-    fetch('/api/content/settings')
-      .then((r) => r.json())
-      .then(setSettings)
-      .catch(() => {});
+    fetch('/api/content?type=siteSettings')
+      .then((r) => {
+        if (!r.ok) throw new Error(`HTTP ${r.status}`);
+        return r.json();
+      })
+      .then((data) => {
+        const next = Array.isArray(data) ? data[0] : data;
+        setSettings(next || null);
+      })
+      .catch((err) => { setSettingsError(err.message); });
   }, []);
 
   return (
     <main className="pt-24">
       {/* Hero */}
-      <section className="relative py-20 bg-gradient-to-b from-ice to-white">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <span className="inline-block px-4 py-1.5 bg-blue-50 text-blue-600 text-sm font-medium rounded-full mb-4">
+      <section className="relative py-24 lg:py-32 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
+        <div className="absolute inset-0 opacity-10 bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
+        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-aurora/10 rounded-full blur-[120px]" />
+        <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-aqua/10 rounded-full blur-[100px]" />
+
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+          <span className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 text-glow text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
             Special Delivery
           </span>
-          <h1 className="text-4xl lg:text-5xl font-heading font-bold text-navy mb-6">
+          <h1 className="text-4xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
             Founder Delivery
           </h1>
-          <p className="text-lg text-navy/60 max-w-2xl mx-auto">
-            A special delivery service for customers in other states. Experience the founder's personal touch with interstate delivery.
+          <p className="text-lg text-silver/70 max-w-2xl mx-auto leading-relaxed">
+            A special premium delivery service for customers in other states. Experience the founder's personal touch with interstate delivery.
           </p>
         </div>
       </section>
 
-      {/* Details */}
-      <section className="py-16 lg:py-24">
+      {/* How it works */}
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-navy to-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid lg:grid-cols-2 gap-16">
+          <SectionHeading
+            label="How It Works"
+            title="Three Simple Steps"
+            subtitle="Getting your device delivered anywhere in India has never been easier."
+          />
+
+          <div className="grid md:grid-cols-3 gap-8">
+            {steps.map((step, i) => (
+              <motion.div
+                key={step.num}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.15, duration: 0.7 }}
+                className="relative"
+              >
+                <Card className="h-full text-center relative overflow-hidden">
+                  <span className="text-6xl font-heading font-bold bg-gradient-to-b from-aurora/10 to-transparent bg-clip-text text-transparent absolute top-4 right-6">
+                    {step.num}
+                  </span>
+                  <div className="relative">
+                    <div className="w-12 h-12 bg-gradient-to-br from-aurora to-aqua rounded-xl flex items-center justify-center text-white font-heading font-bold text-lg mx-auto mb-4 shadow-lg shadow-aurora/20">
+                      {step.num}
+                    </div>
+                    <h3 className="font-heading font-bold text-navy text-lg mb-2">{step.title}</h3>
+                    <p className="text-navy/60 text-sm leading-relaxed">{step.desc}</p>
+                  </div>
+                </Card>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Features + Form */}
+      <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-ice/40 relative">
+        <div className="absolute top-0 left-0 w-[300px] h-[300px] bg-aqua/5 rounded-full blur-3xl" />
+
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+          <div className="grid lg:grid-cols-2 gap-16 items-start">
+            {/* Left - info */}
             <div>
-              <h2 className="text-3xl font-heading font-bold text-navy mb-6">What is Founder Delivery?</h2>
-              <div className="space-y-4 text-navy/70 leading-relaxed">
-                <p>
-                  Founder Delivery is our premium delivery service designed for customers located in other states. The founder personally oversees the delivery process to ensure every customer receives their device with the same care and attention.
-                </p>
-                <p>
-                  This service ensures safe, trackable, and timely delivery regardless of your location in India.
-                </p>
+              <SectionHeading label="Why Choose Us" title="Premium Delivery Experience" centered={false} />
+
+              <div className="space-y-4 mb-10">
+                {features.map((feature, i) => (
+                  <motion.div
+                    key={feature.title}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-start gap-4 bg-white/80 backdrop-blur-sm rounded-xl p-5 border border-silver/10"
+                  >
+                    <div className="w-10 h-10 bg-aurora/10 rounded-xl flex items-center justify-center flex-shrink-0">
+                      <feature.icon className="w-5 h-5 text-aurora" />
+                    </div>
+                    <div>
+                      <h3 className="font-heading font-semibold text-navy mb-1">{feature.title}</h3>
+                      <p className="text-navy/60 text-sm leading-relaxed">{feature.desc}</p>
+                    </div>
+                  </motion.div>
+                ))}
               </div>
 
-              <div className="mt-8 space-y-4">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold text-sm flex-shrink-0">1</div>
-                  <div>
-                    <h3 className="font-heading font-semibold text-navy">Request Delivery</h3>
-                    <p className="text-navy/60 text-sm">Fill out the form with your details and preferred delivery date.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold text-sm flex-shrink-0">2</div>
-                  <div>
-                    <h3 className="font-heading font-semibold text-navy">Confirmation</h3>
-                    <p className="text-navy/60 text-sm">Our team will confirm availability and schedule the delivery.</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 bg-blue-50 rounded-full flex items-center justify-center text-blue-500 font-bold text-sm flex-shrink-0">3</div>
-                  <div>
-                    <h3 className="font-heading font-semibold text-navy">Delivery</h3>
-                    <p className="text-navy/60 text-sm">Receive your device with full tracking and founder's guarantee.</p>
-                  </div>
-                </div>
-              </div>
-
-              <div className="mt-8 p-6 bg-ice/40 rounded-2xl">
-                <h3 className="font-heading font-bold text-navy mb-3">Need Help?</h3>
-                <div className="space-y-2">
-                  <a href={`tel:${settings?.phone || '+919876543210'}`} className="flex items-center gap-2 text-navy/70 hover:text-blue-500 text-sm">
+              {/* Contact info */}
+              <div className="p-6 bg-ice/40 rounded-2xl border border-silver/10">
+                <h3 className="font-heading font-bold text-navy mb-4">Need Help?</h3>
+                <div className="space-y-3">
+                  <a href={`tel:${settings?.phone || '+919876543210'}`} className="flex items-center gap-3 text-navy/70 hover:text-aurora transition-colors text-sm">
                     <Phone className="w-4 h-4" /> {settings?.phone || '+91 98765 43210'}
                   </a>
-                  <a href={`https://wa.me/${settings?.whatsapp || '919876543210'}`} className="flex items-center gap-2 text-navy/70 hover:text-green-500 text-sm">
+                  <a href="mailto:info@himalyaspersh.com" className="flex items-center gap-3 text-navy/70 hover:text-aurora transition-colors text-sm">
+                    <Mail className="w-4 h-4" /> info@himalyaspersh.com
+                  </a>
+                  <a href={`https://wa.me/${settings?.whatsapp || '919876543210'}`} className="flex items-center gap-3 text-navy/70 hover:text-green-600 transition-colors text-sm">
                     <MessageCircle className="w-4 h-4" /> WhatsApp us
                   </a>
                 </div>
               </div>
             </div>
 
+            {/* Right - form */}
             <div>
-              <FounderDeliveryForm />
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+              >
+                <FounderDeliveryForm />
+              </motion.div>
             </div>
           </div>
         </div>

@@ -1,6 +1,9 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { motion } from 'framer-motion';
+import { AdminListPanel } from '@/components/admin/AdminListPanel';
+import { Users } from 'lucide-react';
 
 interface Leader {
   _id: string;
@@ -36,47 +39,55 @@ export default function LeadershipPage() {
     } catch {}
   };
 
+  const updateField = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+
   return (
-    <div className="max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">Leadership</h1>
-        <p className="text-navy/60">Manage leadership profiles.</p>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 p-6 mb-8">
-        <h2 className="font-heading font-bold text-navy text-xl mb-4">Add Entry</h2>
+    <AdminListPanel
+      title="Leadership"
+      description="Manage leadership profiles."
+      icon={<Users className="w-6 h-6" />}
+      headers={['Name', 'Designation', 'Order']}
+      emptyMessage="No leadership entries yet."
+      form={
         <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
-          <input placeholder="Name" value={form.name} onChange={e => setForm({...form, name: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Designation" value={form.designation} onChange={e => setForm({...form, designation: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Photo URL" value={form.photo} onChange={e => setForm({...form, photo: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg sm:col-span-2" />
-          <input placeholder="LinkedIn URL" value={form.linkedin} onChange={e => setForm({...form, linkedin: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input type="number" placeholder="Order" value={form.order} onChange={e => setForm({...form, order: parseInt(e.target.value)})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <textarea placeholder="Biography" value={form.biography} onChange={e => setForm({...form, biography: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg sm:col-span-2" rows={3} />
-          <button type="submit" className="btn-primary sm:col-span-2">Add Entry</button>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Name *</label>
+            <input placeholder="Full Name" value={form.name} onChange={e => updateField('name', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Designation *</label>
+            <input placeholder="Designation" value={form.designation} onChange={e => updateField('designation', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Photo URL</label>
+            <input placeholder="https://..." value={form.photo} onChange={e => updateField('photo', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">LinkedIn URL</label>
+            <input placeholder="https://linkedin.com/in/..." value={form.linkedin} onChange={e => updateField('linkedin', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Display Order</label>
+            <input type="number" placeholder="0" value={form.order || ''} onChange={e => updateField('order', parseInt(e.target.value))} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Biography</label>
+            <textarea placeholder="Short bio..." value={form.biography} onChange={e => updateField('biography', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 resize-none text-navy transition-all" rows={3} />
+          </div>
+          <button type="submit" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-aurora/20 hover:-translate-y-0.5 transition-all duration-300 text-sm sm:col-span-2">
+            <Users className="w-4 h-4" />
+            Add Leader
+          </button>
         </form>
-      </div>
-
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-ice/50">
-            <tr>
-              <th className="px-4 py-3 text-left">Name</th>
-              <th className="px-4 py-3 text-left">Designation</th>
-              <th className="px-4 py-3 text-left">Order</th>
-            </tr>
-          </thead>
-          <tbody>
-            {leaders.map((leader) => (
-              <tr key={leader._id} className="border-t border-silver/10">
-                <td className="px-4 py-3 text-navy">{leader.name}</td>
-                <td className="px-4 py-3 text-navy/70">{leader.designation}</td>
-                <td className="px-4 py-3 text-navy/70">{leader.order}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        {leaders.length === 0 && <p className="p-6 text-center text-navy/50">No leadership entries yet.</p>}
-      </div>
-    </div>
+      }
+    >
+      {leaders.map((leader) => (
+        <tr key={leader._id} className="border-t border-silver/10 hover:bg-ice/20 transition-colors">
+          <td className="px-6 py-3.5 text-navy font-medium">{leader.name}</td>
+          <td className="px-6 py-3.5 text-navy/70">{leader.designation}</td>
+          <td className="px-6 py-3.5 text-navy/70">{leader.order}</td>
+        </tr>
+      ))}
+    </AdminListPanel>
   );
 }

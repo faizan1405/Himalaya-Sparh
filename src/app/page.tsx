@@ -1,65 +1,119 @@
-import Image from "next/image";
+'use client';
 
-export default function Home() {
+import { Suspense } from 'react';
+import HeroClient from './(public)/HeroClient';
+import { FeaturesSection } from '@/components/public/FeaturesSection';
+import { WhyWeNeedSection } from '@/components/public/WhyWeNeedSection';
+import { motion } from 'framer-motion';
+import Link from 'next/link';
+import { ArrowRight } from 'lucide-react';
+
+function HeroSkeleton() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+    <section className="relative h-screen flex items-center justify-center bg-navy">
+      <div className="text-center">
+        <div className="w-64 h-8 bg-white/10 rounded animate-pulse mx-auto mb-4" />
+        <div className="w-96 h-12 bg-white/10 rounded animate-pulse mx-auto mb-6" />
+        <div className="w-80 h-6 bg-white/10 rounded animate-pulse mx-auto" />
+      </div>
+    </section>
+  );
+}
+
+function StatsBar() {
+  const stats = [
+    { value: '10K+', label: 'Happy Families' },
+    { value: '99.9%', label: 'Purity Rate' },
+    { value: '100%', label: 'Natural Process' },
+    { value: '0', label: 'Electricity Needed' },
+  ];
+
+  return (
+    <section id="content" className="relative z-10 -mt-16">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.2 }}
+          className="bg-white rounded-3xl shadow-xl shadow-blue-500/5 border border-silver/10 p-8 lg:p-10"
+        >
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            {stats.map((stat, i) => (
+              <motion.div
+                key={stat.label}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: i * 0.1 }}
+                className="text-center"
+              >
+                <p className="text-3xl lg:text-4xl font-heading font-bold bg-gradient-to-r from-aurora to-navy bg-clip-text text-transparent">
+                  {stat.value}
+                </p>
+                <p className="text-navy/50 text-sm mt-1">{stat.label}</p>
+              </motion.div>
+            ))}
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+function CTASection() {
+  return (
+    <section className="py-20 lg:py-28">
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7 }}
+          className="relative"
+        >
+          {/* Background glow */}
+          <div className="absolute inset-0 bg-gradient-to-r from-aurora/5 to-aqua/5 rounded-3xl blur-3xl" />
+
+          <div className="relative bg-gradient-to-br from-navy to-midnight rounded-3xl p-12 lg:p-16 border border-white/10">
+            <h2 className="text-3xl lg:text-5xl font-heading font-bold text-white mb-4">
+              Ready to Transform Your Water?
+            </h2>
+            <p className="text-lg text-silver/70 max-w-2xl mx-auto mb-8">
+              Join thousands of families who have already switched to pure Himalayan water.
+            </p>
+            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+              <Link
+                href="/buy"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-full hover:shadow-lg hover:shadow-aurora/30 hover:-translate-y-0.5 transition-all duration-300"
+              >
+                Order Now
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+              <Link
+                href="/contact"
+                className="inline-flex items-center justify-center gap-2 px-8 py-4 bg-white/10 text-white font-semibold rounded-full border border-white/20 hover:bg-white/15 transition-all duration-300"
+              >
+                Contact Us
+              </Link>
+            </div>
+          </div>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
+export default function HomePage() {
+  return (
+    <main>
+      <Suspense fallback={<HeroSkeleton />}>
+        <HeroClient />
+      </Suspense>
+      <StatsBar />
+      <WhyWeNeedSection />
+      <FeaturesSection />
+      <CTASection />
+    </main>
   );
 }

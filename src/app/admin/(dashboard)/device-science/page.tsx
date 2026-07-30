@@ -1,7 +1,10 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { AdminContentEditor } from '@/components/admin/AdminContentEditor';
+import { AdminPageHeader } from '@/components/admin/AdminPageHeader';
+import { FlaskConical } from 'lucide-react';
 
 export default function DeviceSciencePage() {
   const [data, setData] = useState<any>(null);
@@ -25,11 +28,11 @@ export default function DeviceSciencePage() {
       });
       if (res.ok) {
         setData(updated);
-        setMessage('Saved!');
+        setMessage('Saved successfully!');
         setTimeout(() => setMessage(''), 3000);
       }
     } catch {
-      setMessage('Failed');
+      setMessage('Failed to save');
     } finally {
       setSaving(false);
     }
@@ -37,31 +40,27 @@ export default function DeviceSciencePage() {
 
   if (!data) {
     return (
-      <div className="max-w-4xl">
-        <div className="mb-8">
-          <h1 className="text-3xl font-heading font-bold text-navy mb-2">Device Science</h1>
-          <p className="text-navy/60">Manage science content, features, and 3D model settings.</p>
-        </div>
-        <div className="animate-pulse space-y-4">
-          {[1, 2, 3].map(i => (
-            <div key={i} className="h-32 bg-silver/20 rounded-xl" />
-          ))}
+      <div className="space-y-6">
+        <AdminPageHeader title="Device Science" description="Manage science content, features, and 3D model settings." icon={<FlaskConical className="w-6 h-6" />} />
+        <div className="bg-white/80 backdrop-blur-sm rounded-3xl border border-silver/10 shadow-sm p-8">
+          <div className="animate-pulse space-y-4">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-12 bg-silver/20 rounded-xl" />
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">Device Science</h1>
-        <p className="text-navy/60">Manage science content, features, and 3D model settings.</p>
-      </div>
-      {message && (
-        <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6">
-          {message}
-        </div>
-      )}
+    <div className="space-y-6">
+      <AdminPageHeader
+        title="Device Science"
+        description="Manage science content, features, and 3D model settings."
+        icon={<FlaskConical className="w-6 h-6" />}
+        successMessage={message || undefined}
+      />
       <AdminContentEditor data={data} contentType="deviceScience" onSave={handleSave} saving={saving} />
     </div>
   );

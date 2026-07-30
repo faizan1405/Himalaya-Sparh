@@ -1,6 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
+import { AdminListPanel } from '@/components/admin/AdminListPanel';
+import { ListOrdered } from 'lucide-react';
 
 interface Step {
   _id: string;
@@ -22,33 +24,55 @@ export default function HowItWorksPage() {
     e.preventDefault();
     try {
       const res = await fetch('/api/content/how-it-works', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(form) });
-      if (res.ok) { const newStep = await res.json(); setSteps([...steps, newStep]); setForm({ step: steps.length + 2, heading: '', description: '', icon: '' }); }
+      if (res.ok) {
+        const newStep = await res.json();
+        setSteps([...steps, newStep]);
+        setForm({ step: steps.length + 2, heading: '', description: '', icon: '' });
+      }
     } catch {}
   };
 
+  const updateField = (key: string, value: any) => setForm(prev => ({ ...prev, [key]: value }));
+
   return (
-    <div className="max-w-5xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">How It Works</h1>
-        <p className="text-navy/60">Manage steps for the How It Works page.</p>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 p-6 mb-8">
-        <h2 className="font-heading font-bold text-navy text-xl mb-4">Add Step</h2>
+    <AdminListPanel
+      title="How It Works"
+      description="Manage steps for the How It Works page."
+      icon={<ListOrdered className="w-6 h-6" />}
+      headers={['Step', 'Heading', 'Description']}
+      emptyMessage="No steps yet."
+      form={
         <form onSubmit={handleSubmit} className="grid sm:grid-cols-2 gap-4">
-          <input type="number" placeholder="Step Number" value={form.step} onChange={e => setForm({...form, step: parseInt(e.target.value)})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Icon (emoji)" value={form.icon} onChange={e => setForm({...form, icon: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <input placeholder="Heading" value={form.heading} onChange={e => setForm({...form, heading: e.target.value})} required className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg" />
-          <textarea placeholder="Description" value={form.description} onChange={e => setForm({...form, description: e.target.value})} className="px-3 py-2 bg-ice/50 border border-silver/30 rounded-lg sm:col-span-2" rows={3} />
-          <button type="submit" className="btn-primary sm:col-span-2">Add Step</button>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Step Number *</label>
+            <input type="number" placeholder="1" value={form.step || ''} onChange={e => updateField('step', parseInt(e.target.value))} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div>
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Icon (emoji)</label>
+            <input placeholder="💧" value={form.icon} onChange={e => updateField('icon', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Heading *</label>
+            <input placeholder="Step heading" value={form.heading} onChange={e => updateField('heading', e.target.value)} required className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy transition-all" />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-xs text-navy/70 mb-1.5 font-medium">Description</label>
+            <textarea placeholder="Step description..." value={form.description} onChange={e => updateField('description', e.target.value)} className="w-full px-4 py-2.5 bg-ice/50 border border-silver/20 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-aurora/40 resize-none text-navy transition-all" rows={3} />
+          </div>
+          <button type="submit" className="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-aurora to-aqua text-white font-semibold rounded-xl hover:shadow-lg hover:shadow-aurora/20 hover:-translate-y-0.5 transition-all duration-300 text-sm sm:col-span-2">
+            <ListOrdered className="w-4 h-4" />
+            Add Step
+          </button>
         </form>
-      </div>
-      <div className="bg-white rounded-2xl shadow-sm border border-silver/20 overflow-hidden">
-        <table className="w-full text-sm">
-          <thead className="bg-ice/50"><tr><th className="px-4 py-3 text-left">Step</th><th className="px-4 py-3 text-left">Heading</th><th className="px-4 py-3 text-left">Description</th></tr></thead>
-          <tbody>{steps.map((s) => (<tr key={s._id} className="border-t border-silver/10"><td className="px-4 py-3 text-navy">{s.step}</td><td className="px-4 py-3 text-navy">{s.heading}</td><td className="px-4 py-3 text-navy/70">{s.description}</td></tr>))}</tbody>
-        </table>
-        {steps.length === 0 && <p className="p-6 text-center text-navy/50">No steps yet.</p>}
-      </div>
-    </div>
+      }
+    >
+      {steps.map((s) => (
+        <tr key={s._id} className="border-t border-silver/10 hover:bg-ice/20 transition-colors">
+          <td className="px-6 py-3.5 text-navy font-medium">{s.step}</td>
+          <td className="px-6 py-3.5 text-navy">{s.heading}</td>
+          <td className="px-6 py-3.5 text-navy/70">{s.description}</td>
+        </tr>
+      ))}
+    </AdminListPanel>
   );
 }

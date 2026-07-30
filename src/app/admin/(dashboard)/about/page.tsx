@@ -1,7 +1,9 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { motion } from 'framer-motion';
 import { AdminContentEditor } from '@/components/admin/AdminContentEditor';
+import { FileText } from 'lucide-react';
 
 export default function AboutPage() {
   const [data, setData] = useState<any>(null);
@@ -22,12 +24,26 @@ export default function AboutPage() {
   };
 
   return (
-    <div className="max-w-4xl">
-      <div className="mb-8">
-        <h1 className="text-3xl font-heading font-bold text-navy mb-2">About Us</h1>
-        <p className="text-navy/60">Manage introduction, vision, mission, and story content.</p>
-      </div>
-      {message && <div className="bg-green-50 border border-green-200 text-green-700 px-4 py-3 rounded-xl mb-6">{message}</div>}
+    <div className="space-y-6">
+      {/* Page header */}
+      <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-4">
+        <div className="w-12 h-12 bg-gradient-to-br from-aurora/10 to-aqua/10 rounded-2xl flex items-center justify-center flex-shrink-0">
+          <FileText className="w-6 h-6 text-aurora" />
+        </div>
+        <div>
+          <h1 className="text-2xl font-heading font-bold text-navy mb-1">About Us</h1>
+          <p className="text-navy/60 text-sm">Manage introduction, vision, mission, and story content.</p>
+        </div>
+      </motion.div>
+
+      {/* Status message */}
+      {message && (
+        <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }} className="inline-flex items-center gap-2 px-4 py-2.5 bg-green-50 border border-green-200/60 text-green-700 rounded-xl text-sm">
+          {message}
+        </motion.div>
+      )}
+
+      {/* Editor */}
       <AdminContentEditor data={data} contentType="aboutIntro" onSave={handleSave} saving={saving} />
     </div>
   );
