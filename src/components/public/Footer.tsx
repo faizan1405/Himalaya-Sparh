@@ -7,6 +7,7 @@ import { ArrowUpRight, Mail, Phone, MapPin, Shield, FileText, Truck, RotateCcw }
 const footerLinks = {
   'Company': [
     { label: 'About Us', href: '/about/introduction' },
+    { label: 'Why We Need This', href: '/about/introduction#why-we-need' },
     { label: 'Leadership', href: '/about/leadership' },
     { label: 'Contact Us', href: '/contact' },
   ],

@@ -3,7 +3,6 @@
 import { Suspense } from 'react';
 import HeroClient from './(public)/HeroClient';
 import { FeaturesSection } from '@/components/public/FeaturesSection';
-import { WhyWeNeedSection } from '@/components/public/WhyWeNeedSection';
 import { TestimonialsSection } from '@/components/public/TestimonialsSection';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
@@ -114,7 +113,6 @@ export default function HomePage() {
       <StatsBar />
       <FeaturesSection />
       <TestimonialsSection />
-      <WhyWeNeedSection />
       <CTASection />
     </main>
   );

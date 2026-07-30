@@ -1,40 +1,125 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { Section, SectionHeading } from '@/components/public/Sections';
+import { AlertTriangle, Recycle, FlaskConical, Globe, HeartPulse, DollarSign, Check, Droplets } from 'lucide-react';
+import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
 
-function SkeletonBlock() {
-  return (
-    <div className="w-full max-w-3xl mx-auto">
-      <div className="w-48 h-8 bg-silver/20 rounded animate-pulse mx-auto mb-4" />
-      <div className="w-full h-6 bg-silver/20 rounded animate-pulse mb-3" />
-      <div className="w-3/4 h-6 bg-silver/20 rounded animate-pulse mx-auto mb-12" />
-      <div className="space-y-4">
-        {[1, 2, 3].map((i) => (
-          <div key={i} className="w-full h-24 bg-silver/10 rounded-2xl animate-pulse" />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-const values = [
+const problems = [
   {
-    title: 'Vision',
-    text: 'To make pure Himalayan water accessible to every household in India and beyond.',
-    icon: '👁️',
+    icon: AlertTriangle,
+    iconColor: 'from-amber-500/10 to-orange-500/10',
+    iconTextColor: 'text-amber-500',
+    labelColor: 'bg-amber-500/10 text-amber-600',
+    problem: 'Water Quality Concerns',
+    problemDesc: 'Increasing pollution and contamination in water sources raises serious health concerns for millions.',
+    solution: 'Himalya Sparsh device ensures Himalayan-grade purity through scientifically proven natural methods.',
   },
   {
-    title: 'Mission',
-    text: 'To innovate and deliver scientifically advanced water solutions that preserve nature\'s purity while ensuring health and wellness for all.',
-    icon: '🚀',
+    icon: Recycle,
+    iconColor: 'from-green-500/10 to-emerald-500/10',
+    iconTextColor: 'text-green-500',
+    labelColor: 'bg-green-500/10 text-green-600',
+    problem: 'Excessive Plastic Dependency',
+    problemDesc: 'Billions of plastic water bottles end up in landfills and oceans each year, causing irreversible damage.',
+    solution: 'Our reusable device eliminates single-use plastic bottles from your daily routine forever.',
   },
   {
-    title: 'Purpose',
-    text: 'Empowering lives through clean, natural, and scientifically enhanced water solutions.',
-    icon: '💙',
+    icon: FlaskConical,
+    iconColor: 'from-purple-500/10 to-violet-500/10',
+    iconTextColor: 'text-purple-500',
+    labelColor: 'bg-purple-500/10 text-purple-600',
+    problem: 'Loss of Natural Minerals',
+    problemDesc: 'Most purification methods strip away essential minerals needed for good health and wellness.',
+    solution: 'Our device preserves beneficial minerals while removing harmful contaminants naturally.',
+  },
+  {
+    icon: Globe,
+    iconColor: 'from-aurora/10 to-blue-500/10',
+    iconTextColor: 'text-aurora',
+    labelColor: 'bg-aurora/10 text-aurora',
+    problem: 'Uncertain Water Sources',
+    problemDesc: 'Municipal water quality varies and is rarely consistent across regions and seasons.',
+    solution: 'Get consistent, reliable purity regardless of your water source — tap, RO, or borewell.',
+  },
+  {
+    icon: HeartPulse,
+    iconColor: 'from-red-500/10 to-rose-500/10',
+    iconTextColor: 'text-red-500',
+    labelColor: 'bg-red-500/10 text-red-600',
+    problem: 'Health-Related Concerns',
+    problemDesc: 'Water-borne diseases and chemical contaminants pose serious, long-term health risks.',
+    solution: 'Advanced natural filtration and mineral infusion promote better health and wellness daily.',
+  },
+  {
+    icon: DollarSign,
+    iconColor: 'from-emerald-500/10 to-teal-500/10',
+    iconTextColor: 'text-emerald-500',
+    labelColor: 'bg-emerald-500/10 text-emerald-600',
+    problem: 'Cost of Bottled Water',
+    problemDesc: 'Purchasing bottled water daily is expensive and environmentally wasteful over time.',
+    solution: 'One-time investment for unlimited pure water — save money while saving the planet.',
   },
 ];
+
+function WhyWeNeedSection() {
+  return (
+    <Section id="why-we-need" className="bg-gradient-to-b from-white to-ice/40 relative overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.02] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <SectionHeading
+          label="The Problem We Solve"
+          title="Why We Need This"
+          subtitle="Modern lifestyles bring water challenges that our device solves naturally and effectively."
+        />
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8">
+          {problems.map((item, i) => (
+            <motion.div
+              key={i}
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: i * 0.08 }}
+            >
+              <Card className="overflow-hidden h-full">
+                <div className="grid grid-cols-2 divide-y divide-silver/10">
+                  {/* Problem */}
+                  <div className="p-5 relative">
+                    <div className={`w-10 h-10 bg-gradient-to-br ${item.iconColor} rounded-xl flex items-center justify-center mb-4`}>
+                      <item.icon className={`w-5 h-5 ${item.iconTextColor}`} />
+                    </div>
+                    <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${item.labelColor} mb-3`}>
+                      Problem
+                    </span>
+                    <h3 className="font-heading font-bold text-navy text-lg mb-2">{item.problem}</h3>
+                    <p className="text-navy/60 text-sm leading-relaxed">{item.problemDesc}</p>
+                  </div>
+                  {/* Solution */}
+                  <div className="p-5 bg-aurora/[0.02]">
+                    <div className="w-10 h-10 bg-gradient-to-br from-aurora/10 to-aqua/10 rounded-xl flex items-center justify-center mb-4">
+                      <Check className="w-5 h-5 text-aurora" />
+                    </div>
+                    <span className="inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider bg-aurora/10 text-aurora mb-3">
+                      Solution
+                    </span>
+                    <h3 className="font-heading font-bold text-aurora text-lg mb-2">Our Solution</h3>
+                    <p className="text-navy/60 text-sm leading-relaxed">{item.solution}</p>
+                  </div>
+                </div>
+              </Card>
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="mt-12 text-center">
+          <CTAButton href="/buy" variant="secondary" arrow>
+            Get Your Device
+          </CTAButton>
+        </div>
+      </div>
+    </Section>
+  );
+}
 
 export default function AboutIntroductionPage() {
   return (
@@ -62,7 +147,23 @@ export default function AboutIntroductionPage() {
       <section className="py-20 lg:py-28 bg-gradient-to-b from-navy to-white relative">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-3 gap-8">
-            {values.map((item, i) => (
+            {[
+              {
+                title: 'Vision',
+                text: 'To make pure Himalayan water accessible to every household in India and beyond.',
+                icon: '👁️',
+              },
+              {
+                title: 'Mission',
+                text: 'To innovate and deliver scientifically advanced water solutions that preserve nature\'s purity while ensuring health and wellness for all.',
+                icon: '🚀',
+              },
+              {
+                title: 'Purpose',
+                text: 'Empowering lives through clean, natural, and scientifically enhanced water solutions.',
+                icon: '💙',
+              },
+            ].map((item, i) => (
               <motion.div
                 key={item.title}
                 initial={{ opacity: 0, y: 30 }}
@@ -84,6 +185,9 @@ export default function AboutIntroductionPage() {
           </div>
         </div>
       </section>
+
+      {/* Why We Need This */}
+      <WhyWeNeedSection />
 
       {/* Full-width statement */}
       <section className="py-20 bg-ice/30 relative overflow-hidden">

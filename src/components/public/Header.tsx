@@ -12,6 +12,7 @@ const navItems = [
     label: 'About Us',
     children: [
       { label: 'Introduction', href: '/about/introduction' },
+      { label: 'Why We Need This', href: '/about/introduction' },
       { label: 'Leadership', href: '/about/leadership' },
     ],
   },
@@ -64,9 +65,12 @@ export function Header() {
   useEffect(() => {
     setMobileOpen(false);
     setActiveDropdown(null);
+  }, [pathname]);
+
+  useEffect(() => {
     document.body.style.overflow = mobileOpen ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
-  }, [pathname, mobileOpen]);
+  }, [mobileOpen]);
 
   const handleMobileNav = useCallback(() => {
     setMobileOpen(false);
@@ -96,20 +100,20 @@ export function Header() {
       {/* Top Info Strip */}
       <div className={`bg-navy text-white text-xs transition-all duration-500 ${scrolled ? 'h-0 opacity-0 overflow-hidden' : 'h-8'}`}>
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-          <div className="flex items-center gap-4">
+          <a href="tel:+919876543210" className="text-silver hover:text-aqua transition-colors hidden md:flex items-center gap-1.5">
+            <Phone className="w-3.5 h-3.5" />
+            <span>+91 98765 43210</span>
+          </a>
+          <div className="flex items-center gap-4 ml-auto">
             <a href="mailto:info@himalyaspersh.com" className="text-silver hover:text-aqua transition-colors flex items-center gap-1.5">
               <Mail className="w-3.5 h-3.5" />
               <span className="hidden sm:inline">info@himalyaspersh.com</span>
             </a>
-            <a href="tel:+919876543210" className="text-silver hover:text-aqua transition-colors hidden md:flex items-center gap-1.5">
-              <Phone className="w-3.5 h-3.5" />
-              <span>+91 98765 43210</span>
+            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="text-silver hover:text-aqua transition-colors flex items-center gap-1.5">
+              <MessageCircle className="w-3.5 h-3.5" />
+              <span className="hidden sm:inline">Chat on WhatsApp</span>
             </a>
           </div>
-          <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="text-silver hover:text-aqua transition-colors flex items-center gap-1.5">
-            <MessageCircle className="w-3.5 h-3.5" />
-            <span className="hidden sm:inline">Chat on WhatsApp</span>
-          </a>
         </div>
       </div>
 

@@ -1,7 +1,6 @@
 import { Suspense } from 'react';
 import HeroClient from './HeroClient';
 import { FeaturesSection } from '@/components/public/FeaturesSection';
-import { WhyWeNeedSection } from '@/components/public/WhyWeNeedSection';
 
 function HeroSkeleton() {
   return (
@@ -21,7 +20,6 @@ export default function HomePage() {
       <Suspense fallback={<HeroSkeleton />}>
         <HeroClient />
       </Suspense>
-      <WhyWeNeedSection />
       <FeaturesSection />
     </main>
   );
