@@ -3,15 +3,17 @@
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Menu, X, ChevronDown, Phone, MessageCircle, Mail } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import {
+  Menu, X, ChevronDown, Phone, MessageCircle, Mail, Sparkles
+} from 'lucide-react';
 
 const navItems = [
   { label: 'Home', href: '/' },
   {
     label: 'About Us',
     children: [
-      { label: 'Introduction', href: '/about/introduction' },
+      { label: 'Our Story', href: '/about/introduction' },
       { label: 'Why We Need This', href: '/about/introduction' },
       { label: 'Leadership', href: '/about/leadership' },
     ],
@@ -19,7 +21,7 @@ const navItems = [
   {
     label: 'Device',
     children: [
-      { label: 'Science', href: '/device/science' },
+      { label: 'The Science', href: '/device/science' },
       { label: 'Components', href: '/device/components' },
     ],
   },
@@ -27,7 +29,7 @@ const navItems = [
   {
     label: 'Testimonials',
     children: [
-      { label: 'Lab Test Reports', href: '/testimonials/lab-reports' },
+      { label: 'Lab Reports', href: '/testimonials/lab-reports' },
       { label: 'User Reviews', href: '/testimonials/user-reviews' },
     ],
   },
@@ -45,7 +47,7 @@ const navItems = [
       { label: 'Partnership', href: '/business/partnership' },
     ],
   },
-  { label: 'Contact Us', href: '/contact' },
+  { label: 'Contact', href: '/contact' },
 ];
 
 export function Header() {
@@ -57,7 +59,7 @@ export function Header() {
 
   useEffect(() => {
     setMounted(true);
-    const handleScroll = () => setScrolled(window.scrollY > 50);
+    const handleScroll = () => setScrolled(window.scrollY > 60);
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
@@ -65,214 +67,188 @@ export function Header() {
   useEffect(() => {
     setMobileOpen(false);
     setActiveDropdown(null);
-  }, [pathname]);
-
-  useEffect(() => {
-    document.body.style.overflow = mobileOpen ? 'hidden' : '';
-    return () => { document.body.style.overflow = ''; };
-  }, [mobileOpen]);
-
-  const handleMobileNav = useCallback(() => {
-    setMobileOpen(false);
-    setActiveDropdown(null);
     document.body.style.overflow = '';
-  }, []);
+  }, [pathname]);
 
   if (!mounted) {
     return (
-      <header className="fixed top-0 left-0 right-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            <Link href="/" className="flex items-center gap-2">
-              <div className="w-10 h-10 bg-gradient-to-br from-aurora to-aqua rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg font-heading">HS</span>
-              </div>
-              <span className="font-heading font-bold text-xl text-navy">Himalya Sparsh</span>
-            </Link>
-          </div>
-        </div>
-      </header>
+      <header className="fixed top-0 left-0 right-0 z-50 h-20" />
     );
   }
 
   return (
-    <header className="fixed top-0 left-0 right-0 z-50">
-      {/* Top Info Strip */}
-      <div className={`bg-navy text-white text-xs transition-all duration-500 ${scrolled ? 'h-0 opacity-0 overflow-hidden' : 'h-8'}`}>
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-8">
-          <a href="tel:+919876543210" className="text-silver hover:text-aqua transition-colors hidden md:flex items-center gap-1.5">
-            <Phone className="w-3.5 h-3.5" />
-            <span>+91 98765 43210</span>
-          </a>
-          <div className="flex items-center gap-4 ml-auto">
-            <a href="mailto:info@himalyaspersh.com" className="text-silver hover:text-aqua transition-colors flex items-center gap-1.5">
-              <Mail className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">info@himalyaspersh.com</span>
-            </a>
-            <a href="https://wa.me/919876543210" target="_blank" rel="noopener noreferrer" className="text-silver hover:text-aqua transition-colors flex items-center gap-1.5">
-              <MessageCircle className="w-3.5 h-3.5" />
-              <span className="hidden sm:inline">Chat on WhatsApp</span>
-            </a>
-          </div>
-        </div>
-      </div>
-
-      {/* Main Navigation */}
-      <nav
-        className={`transition-all duration-500 ${
-          scrolled ? 'frosted-glass shadow-lg border-b border-border/50' : 'bg-transparent'
-        }`}
-      >
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center justify-between h-16 lg:h-20">
-            {/* Logo */}
-            <Link href="/" className="flex items-center gap-2.5 group">
-              <div className="w-10 h-10 bg-gradient-to-br from-aurora to-aqua rounded-xl flex items-center justify-center shadow-lg shadow-aurora/20 group-hover:shadow-aurora/40 transition-shadow">
-                <span className="text-white font-bold text-lg font-heading">HS</span>
+    <header
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-700 ${
+        scrolled
+          ? 'glass-strong shadow-2xl shadow-navy/30'
+          : 'bg-transparent'
+      }`}
+    >
+      <div className="container-default px-6 lg:px-8">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo */}
+          <Link href="/" className="flex items-center gap-3 group relative z-10">
+            <div className="relative">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-aurora to-aqua flex items-center justify-center shadow-lg shadow-aurora/20 group-hover:shadow-aurora/40 transition-shadow duration-500">
+                <span className="text-white font-bold text-lg font-body">HS</span>
               </div>
-              <div className="hidden sm:block">
-                <span className={`font-heading font-bold text-lg transition-colors ${scrolled ? 'text-navy' : 'text-navy'}`}>
-                  Himalya Sparsh
-                </span>
-                <span className="block text-[10px] text-navy/40 font-medium tracking-wider uppercase -mt-0.5">Pure Water</span>
-              </div>
-            </Link>
+              <div className="absolute inset-0 rounded-xl bg-gradient-to-br from-aurora to-aqua opacity-0 group-hover:opacity-100 blur-md transition-opacity duration-500 -z-10" />
+            </div>
+            <div className="hidden sm:block">
+              <span className="font-display font-bold text-xl text-white tracking-tight">
+                Himalya Sparsh
+              </span>
+              <span className="block text-[10px] text-silver/60 font-body font-medium tracking-[0.2em] uppercase -mt-0.5">
+                Pure Himalayan Water
+              </span>
+            </div>
+          </Link>
 
-            {/* Desktop Nav */}
-            <div className="hidden lg:flex items-center gap-0.5">
-              {navItems.map((item) => (
-                <div
-                  key={item.label}
-                  className="relative"
-                  onMouseEnter={() => item.children && setActiveDropdown(item.label)}
-                  onMouseLeave={() => setActiveDropdown(null)}
-                >
-                  {item.href ? (
-                    <Link
-                      href={item.href}
-                      className={`px-3.5 py-2 text-sm font-medium transition-all duration-200 rounded-lg relative ${
-                        pathname === item.href
-                          ? 'text-aurora'
-                          : 'text-navy/70 hover:text-navy'
-                      }`}
-                    >
-                      {item.label}
-                      {pathname === item.href && (
-                        <motion.div
-                          layoutId="nav-active-indicator"
-                          className="absolute -bottom-0.5 left-3.5 right-3.5 h-0.5 bg-gradient-to-r from-aurora to-aqua rounded-full"
-                        />
-                      )}
-                    </Link>
-                  ) : (
-                    <button
-                      className={`flex items-center gap-1 px-3.5 py-2 text-sm font-medium transition-all duration-200 rounded-lg ${
-                        activeDropdown === item.label ? 'text-aurora' : 'text-navy/70 hover:text-navy'
-                      }`}
-                    >
-                      {item.label}
-                      <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
-                      {activeDropdown === item.label && (
-                        <motion.div
-                          layoutId="nav-active-indicator"
-                          className="absolute -bottom-0.5 left-3.5 right-3.5 h-0.5 bg-gradient-to-r from-aurora to-aqua rounded-full"
-                        />
-                      )}
-                    </button>
-                  )}
-
-                  {/* Dropdown */}
-                  <AnimatePresence>
-                    {item.children && activeDropdown === item.label && (
+          {/* Desktop Nav */}
+          <nav className="hidden lg:flex items-center gap-1">
+            {navItems.map((item) => (
+              <div
+                key={item.label}
+                className="relative"
+                onMouseEnter={() => item.children && setActiveDropdown(item.label)}
+                onMouseLeave={() => setActiveDropdown(null)}
+              >
+                {item.href ? (
+                  <Link
+                    href={item.href}
+                    className={`relative px-4 py-2 text-[13px] font-body font-medium tracking-wide transition-colors duration-300 rounded-full ${
+                      pathname === item.href
+                        ? 'text-white'
+                        : 'text-silver hover:text-white'
+                    }`}
+                  >
+                    {pathname === item.href && (
                       <motion.div
-                        initial={{ opacity: 0, y: -8, scale: 0.96 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: -8, scale: 0.96 }}
-                        transition={{ duration: 0.2, ease: [0.4, 0, 0.2, 1] }}
-                        className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-52 bg-white rounded-2xl shadow-xl shadow-navy/10 border border-border/60 py-2 z-50"
-                      >
-                        <div className="absolute -top-1.5 left-1/2 -translate-x-1/2 w-3 h-3 bg-white border-l border-t border-border/60 rotate-45" />
+                        layoutId="nav-indicator"
+                        className="absolute inset-0 bg-white/[0.08] rounded-full"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.label}</span>
+                  </Link>
+                ) : (
+                  <button
+                    className={`relative px-4 py-2 text-[13px] font-body font-medium tracking-wide transition-colors duration-300 rounded-full flex items-center gap-1 ${
+                      activeDropdown === item.label ? 'text-white' : 'text-silver hover:text-white'
+                    }`}
+                  >
+                    {activeDropdown === item.label && (
+                      <motion.div
+                        layoutId="nav-indicator"
+                        className="absolute inset-0 bg-white/[0.08] rounded-full"
+                        transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                      />
+                    )}
+                    <span className="relative z-10">{item.label}</span>
+                    <ChevronDown
+                      className={`w-3.5 h-3.5 relative z-10 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`}
+                    />
+                  </button>
+                )}
+
+                {/* Dropdown */}
+                <AnimatePresence>
+                  {item.children && activeDropdown === item.label && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 8, scale: 0.96 }}
+                      animate={{ opacity: 1, y: 0, scale: 1 }}
+                      exit={{ opacity: 0, y: 8, scale: 0.96 }}
+                      transition={{ duration: 0.25, ease: [0.25, 0.46, 0.45, 0.94] as const }}
+                      className="absolute top-full left-1/2 -translate-x-1/2 pt-3"
+                    >
+                      <div className="glass-strong rounded-2xl p-2 min-w-[200px] shadow-2xl shadow-navy/50">
                         {item.children.map((child) => (
                           <Link
                             key={child.href}
                             href={child.href}
-                            className={`block px-4 py-2.5 text-sm transition-colors rounded-lg mx-1 ${
+                            className={`block px-4 py-2.5 text-sm rounded-xl transition-all duration-200 ${
                               pathname === child.href
-                                ? 'text-aurora bg-aurora/5 font-medium'
-                                : 'text-navy/70 hover:text-aurora hover:bg-ice'
+                                ? 'text-aurora bg-aurora/[0.08] font-medium'
+                                : 'text-silver hover:text-white hover:bg-white/[0.04]'
                             }`}
                           >
                             {child.label}
                           </Link>
                         ))}
-                      </motion.div>
-                    )}
-                  </AnimatePresence>
-                </div>
-              ))}
-              <Link href="/buy" className="ml-4 btn-primary text-sm !py-2.5 !px-6">
-                Buy Now
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </div>
+            ))}
+
+            <div className="ml-4 pl-4 border-l border-white/[0.06]">
+              <Link href="/buy" className="btn-primary text-[13px] !py-2.5 !px-6">
+                Get Yours
               </Link>
             </div>
+          </nav>
 
-            {/* Mobile Menu Button */}
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2.5 text-navy rounded-xl hover:bg-ice/50 transition-colors focus-ring"
-              aria-label="Toggle menu"
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-          </div>
+          {/* Mobile Menu Button */}
+          <button
+            onClick={() => setMobileOpen(!mobileOpen)}
+            className="lg:hidden relative z-10 p-2.5 text-white rounded-xl hover:bg-white/[0.06] transition-colors focus-ring"
+            aria-label="Toggle menu"
+          >
+            {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+          </button>
         </div>
-      </nav>
+      </div>
 
-      {/* Full-screen Mobile Menu */}
+      {/* Mobile Menu */}
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-            className="fixed inset-0 z-[60] bg-navy/98 backdrop-blur-xl lg:hidden"
+            transition={{ duration: 0.4 }}
+            className="fixed inset-0 z-[60] lg:hidden"
           >
-            <div className="flex flex-col h-full">
+            {/* Backdrop */}
+            <div className="absolute inset-0 bg-navy/95 backdrop-blur-2xl" />
+
+            <div className="relative flex flex-col h-full">
               {/* Mobile Header */}
-              <div className="flex items-center justify-between px-6 h-16 lg:h-20">
-                <Link href="/" onClick={handleMobileNav} className="flex items-center gap-2.5">
-                  <div className="w-10 h-10 bg-gradient-to-br from-aurora to-aqua rounded-xl flex items-center justify-center">
-                    <span className="text-white font-bold text-lg font-heading">HS</span>
+              <div className="flex items-center justify-between px-6 h-20">
+                <Link href="/" className="flex items-center gap-3">
+                  <div className="w-9 h-9 bg-gradient-to-br from-aurora to-aqua rounded-xl flex items-center justify-center">
+                    <span className="text-white font-bold font-body">HS</span>
                   </div>
-                  <span className="font-heading font-bold text-xl text-white">Himalya Sparsh</span>
+                  <span className="font-display font-bold text-lg text-white">Himalya Sparsh</span>
                 </Link>
                 <button
-                  onClick={handleMobileNav}
-                  className="p-2.5 text-white/80 hover:text-white rounded-xl hover:bg-white/10 transition-colors"
+                  onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; }}
+                  className="p-2 text-white/70 hover:text-white rounded-xl hover:bg-white/[0.06] transition-colors"
                   aria-label="Close menu"
                 >
-                  <X className="w-6 h-6" />
+                  <X className="w-5 h-5" />
                 </button>
               </div>
 
               {/* Mobile Nav Links */}
-              <div className="flex-1 overflow-y-auto px-6 py-8">
-                <nav className="space-y-1">
+              <div className="flex-1 overflow-y-auto px-6 py-6">
+                <nav className="space-y-0.5">
                   {navItems.map((item, i) => (
                     <motion.div
                       key={item.label}
                       initial={{ opacity: 0, x: -20 }}
                       animate={{ opacity: 1, x: 0 }}
-                      transition={{ delay: i * 0.05 + 0.1 }}
+                      transition={{ delay: i * 0.04 + 0.1 }}
                     >
                       {item.href ? (
                         <Link
                           href={item.href}
-                          onClick={handleMobileNav}
-                          className={`block px-4 py-3.5 text-lg font-medium rounded-2xl transition-colors ${
+                          onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; }}
+                          className={`block px-5 py-3.5 text-lg font-display font-medium rounded-2xl transition-all duration-300 ${
                             pathname === item.href
-                              ? 'text-white bg-white/10'
-                              : 'text-white/80 hover:text-white hover:bg-white/5'
+                              ? 'text-white bg-white/[0.08]'
+                              : 'text-silver hover:text-white hover:bg-white/[0.03]'
                           }`}
                         >
                           {item.label}
@@ -281,10 +257,10 @@ export function Header() {
                         <>
                           <button
                             onClick={() => setActiveDropdown(activeDropdown === item.label ? null : item.label)}
-                            className="w-full flex items-center justify-between px-4 py-3.5 text-lg font-medium text-white/80 hover:text-white hover:bg-white/5 rounded-2xl transition-colors"
+                            className="w-full flex items-center justify-between px-5 py-3.5 text-lg font-display font-medium text-silver hover:text-white hover:bg-white/[0.03] rounded-2xl transition-all duration-300"
                           >
                             {item.label}
-                            <ChevronDown className={`w-5 h-5 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
+                            <ChevronDown className={`w-4 h-4 transition-transform duration-300 ${activeDropdown === item.label ? 'rotate-180' : ''}`} />
                           </button>
                           <AnimatePresence>
                             {item.children && activeDropdown === item.label && (
@@ -299,11 +275,11 @@ export function Header() {
                                   <Link
                                     key={child.href}
                                     href={child.href}
-                                    onClick={handleMobileNav}
-                                    className={`block px-4 py-3 text-base rounded-xl transition-colors ${
+                                    onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; }}
+                                    className={`block px-5 py-3 text-base font-body rounded-xl transition-colors ${
                                       pathname === child.href
-                                        ? 'text-aurora bg-white/5 font-medium'
-                                        : 'text-white/60 hover:text-white'
+                                        ? 'text-aurora bg-aurora/[0.06] font-medium'
+                                        : 'text-silver/70 hover:text-white'
                                     }`}
                                   >
                                     {child.label}
@@ -323,33 +299,26 @@ export function Header() {
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: 0.5 }}
-                  className="mt-8 space-y-4"
+                  className="mt-10 space-y-5"
                 >
                   <Link
                     href="/buy"
-                    onClick={handleMobileNav}
+                    onClick={() => { setMobileOpen(false); document.body.style.overflow = ''; }}
                     className="block text-center btn-primary w-full !py-4 text-base"
                   >
-                    Buy Now
+                    Get Yours Now
                   </Link>
-                  <div className="flex items-center justify-center gap-6 text-white/60 text-sm">
+                  <div className="flex items-center justify-center gap-6 text-silver/50 text-sm">
                     <a href="tel:+919876543210" className="flex items-center gap-2 hover:text-aqua transition-colors">
                       <Phone className="w-4 h-4" />
-                      <span>+91 98765 43210</span>
+                      <span className="font-body">+91 98765 43210</span>
                     </a>
                     <a href="https://wa.me/919876543210" target="_blank" rel="noopener" className="flex items-center gap-2 hover:text-aqua transition-colors">
                       <MessageCircle className="w-4 h-4" />
-                      <span>WhatsApp</span>
+                      <span className="font-body">WhatsApp</span>
                     </a>
                   </div>
                 </motion.div>
-              </div>
-
-              {/* Mobile Footer */}
-              <div className="px-6 py-6 border-t border-white/10">
-                <p className="text-white/30 text-xs text-center">
-                  &copy; 2025 Himalya Sparsh. All rights reserved.
-                </p>
               </div>
             </div>
           </motion.div>

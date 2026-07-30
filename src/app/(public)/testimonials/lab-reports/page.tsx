@@ -43,37 +43,38 @@ export default function LabReportsPage() {
   const filtered = filter === 'All' ? reports : reports.filter((r) => r.category === filter);
 
   return (
-    <main className="pt-24">
+    <main>
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
+        <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
         <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-aurora/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-aqua/10 rounded-full blur-[100px]" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <span className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 text-glow text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
+          <span className="inline-block px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] text-aurora text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
             Lab Test Reports
           </span>
-          <h1 className="text-4xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
+          <h1 className="heading-xl font-display font-bold text-white mb-6 leading-tight tracking-tight text-balance">
             Verified &amp; Certified
           </h1>
-          <p className="text-lg text-silver/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-body-md text-silver/70 max-w-2xl mx-auto leading-relaxed">
             All reports from accredited laboratories ensuring complete transparency and trust.
           </p>
         </div>
       </section>
 
       {/* Reports Section */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-navy to-white relative">
-        <div className="absolute inset-0 opacity-[0.02] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <Section id="reports" dark>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
+            label="Quality Assurance"
             title="Quality Assurance"
             subtitle="Every report proves our commitment to purity, safety, and scientific excellence."
+            lightTitle
           />
 
           {error && (
-            <div className="text-center text-red-500 py-8 bg-red-50/50 rounded-2xl border border-red-200/50">{error}</div>
+            <div className="text-center text-red-400 py-8 bg-red-500/10 rounded-2xl border border-red-500/20">{error}</div>
           )}
 
           {/* Category Filters */}
@@ -85,7 +86,7 @@ export default function LabReportsPage() {
                 className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
                   filter === cat
                     ? 'bg-gradient-to-r from-aurora to-aqua text-white shadow-lg shadow-aurora/20'
-                    : 'bg-white text-navy/70 border border-silver/30 hover:border-aurora/20 hover:text-navy'
+                    : 'bg-white/[0.03] text-silver/70 border border-white/[0.08] hover:border-aurora/20'
                 }`}
               >
                 {cat}
@@ -104,7 +105,7 @@ export default function LabReportsPage() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.08 }}
                 >
-                  <Card className="h-full flex flex-col">
+                  <Card glow className="h-full flex flex-col">
                     <div className="flex items-center gap-3 mb-4">
                       <div className="w-10 h-10 bg-gradient-to-br from-aurora/10 to-aqua/10 rounded-xl flex items-center justify-center text-aurora">
                         {categoryIcons[report.category] || <FileText className="w-5 h-5" />}
@@ -112,16 +113,16 @@ export default function LabReportsPage() {
                       <span className="text-xs font-medium text-aurora/80 uppercase tracking-wider">{report.category}</span>
                     </div>
 
-                    <h3 className="font-heading font-bold text-navy text-lg mb-1">{report.testType}</h3>
-                    <p className="text-navy/50 text-sm mb-2">{report.laboratory}</p>
-                    <p className="text-navy/60 text-sm leading-relaxed mb-4 flex-1">{report.summary}</p>
+                    <h3 className="font-display font-bold text-white text-lg mb-1">{report.testType}</h3>
+                    <p className="text-silver/50 text-sm mb-2">{report.laboratory}</p>
+                    <p className="text-silver/60 text-sm leading-relaxed mb-4 flex-1">{report.summary}</p>
 
-                    <div className="flex items-center gap-2 text-xs text-navy/40 mb-4">
-                      <CheckCircle className="w-3.5 h-3.5 text-green-500" />
-                      <span>{new Date(report.date).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}</span>
+                    <div className="flex items-center gap-2 text-xs text-silver/40 mb-4">
+                      <CheckCircle className="w-3 h-3" />
+                      <span>{report.date}</span>
                     </div>
 
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-2">
                       {report.fileUrl && (
                         <a
                           href={report.fileUrl}
@@ -133,20 +134,20 @@ export default function LabReportsPage() {
                           View Report
                         </a>
                       )}
-                      <span className="text-xs text-navy/40">{report.verificationInfo}</span>
+                      <span className="text-xs text-silver/40">{report.verificationInfo}</span>
                     </div>
                   </Card>
                 </motion.div>
               ))}
             </div>
           ) : !loading && (
-            <div className="text-center text-navy/50 py-16 bg-white/50 rounded-2xl border border-silver/10">
-              <FileText className="w-12 h-12 text-navy/20 mx-auto mb-4" />
+            <div className="text-center text-silver/40 py-16 bg-white/[0.02] rounded-2xl border border-white/[0.06]">
+              <FileText className="w-12 h-12 text-silver/20 mx-auto mb-4" />
               <p>Lab reports will be displayed once added via admin panel.</p>
             </div>
           )}
         </div>
-      </section>
+      </Section>
     </main>
   );
 }

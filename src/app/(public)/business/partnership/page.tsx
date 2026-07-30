@@ -3,7 +3,10 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
-import { Briefcase, Building2, Store, Landmark, Hotel, FlaskConical, Cpu } from 'lucide-react';
+import { Briefcase, Building2, Store, Landmark, Hotel, FlaskConical, Cpu, CheckCircle } from 'lucide-react';
+
+const inputCls = "w-full px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 focus:border-aurora/40 text-white placeholder:text-silver/30 transition-colors";
+const labelCls = "block text-sm font-medium text-silver mb-2";
 
 const partnershipTypes = [
   { icon: Building2, title: 'Strategic Partnership', desc: 'Long-term strategic alliances for mutual growth and market expansion across geographies.' },
@@ -61,33 +64,34 @@ export default function PartnershipPage() {
   };
 
   return (
-    <main className="pt-24">
+    <main>
       {/* Hero */}
       <section className="relative py-24 lg:py-32 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-10 bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
+        <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
         <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-aurora/10 rounded-full blur-[120px]" />
         <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-aqua/10 rounded-full blur-[100px]" />
 
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <span className="inline-block px-4 py-1.5 bg-white/5 border border-white/10 text-glow text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
+          <span className="inline-block px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] text-aurora text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
             Partnerships
           </span>
-          <h1 className="text-4xl lg:text-6xl font-heading font-bold text-white mb-6 leading-tight">
+          <h1 className="heading-xl font-display font-bold text-white mb-6 leading-tight tracking-tight text-balance">
             Business Partnership
           </h1>
-          <p className="text-lg text-silver/70 max-w-2xl mx-auto leading-relaxed">
+          <p className="text-body-md text-silver/70 max-w-2xl mx-auto leading-relaxed">
             Explore various partnership opportunities and collaborate with us to grow together.
           </p>
         </div>
       </section>
 
       {/* Partnership Types */}
-      <section className="py-20 lg:py-28 bg-gradient-to-b from-navy to-white relative">
-        <div className="absolute inset-0 opacity-[0.02] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+      <Section dark>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
+            label="Partnership Opportunities"
             title="Partnership Opportunities"
             subtitle="Multiple ways to collaborate with Himalya Sparsh and build a shared future."
+            lightTitle
           />
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
@@ -99,12 +103,12 @@ export default function PartnershipPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
               >
-                <Card className="group h-full">
+                <Card glow className="group h-full">
                   <div className="w-12 h-12 bg-gradient-to-br from-aurora/10 to-aqua/10 rounded-xl flex items-center justify-center text-aurora mb-4 group-hover:scale-110 transition-transform duration-500">
                     <type.icon className="w-6 h-6" />
                   </div>
-                  <h3 className="font-heading font-bold text-navy text-lg mb-2">{type.title}</h3>
-                  <p className="text-navy/60 text-sm leading-relaxed">{type.desc}</p>
+                  <h3 className="font-display font-bold text-white text-lg mb-2">{type.title}</h3>
+                  <p className="text-silver/60 text-sm leading-relaxed">{type.desc}</p>
                 </Card>
               </motion.div>
             ))}
@@ -116,91 +120,89 @@ export default function PartnershipPage() {
               <motion.div
                 initial={{ opacity: 0, scale: 0.95 }}
                 animate={{ opacity: 1, scale: 1 }}
-                className="bg-white/80 backdrop-blur-sm rounded-3xl p-10 border border-silver/10 text-center"
+                className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-10 border border-white/[0.08] text-center"
               >
-                <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-                  <svg className="w-8 h-8 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
-                  </svg>
+                <div className="w-16 h-16 bg-green-500/10 border border-green-500/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <CheckCircle className="w-8 h-8 text-green-400" />
                 </div>
-                <h3 className="font-heading font-bold text-navy text-xl mb-2">Enquiry Submitted!</h3>
-                <p className="text-navy/60">We&apos;ll review your proposal and get back to you soon.</p>
+                <h3 className="heading-sm font-display font-bold text-white mb-2">Enquiry Submitted!</h3>
+                <p className="text-silver/60">We&apos;ll review your proposal and get back to you soon.</p>
               </motion.div>
             ) : showForm ? (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-sm rounded-3xl p-8 lg:p-10 shadow-sm border border-silver/10">
-                <h3 className="font-heading font-bold text-navy text-2xl mb-8">Partnership Enquiry</h3>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-8 lg:p-10 border border-white/[0.08]">
+                <h3 className="heading-sm font-display font-bold text-white mb-8">Partnership Enquiry</h3>
                 {submitError && (
-                  <div className="mb-6 p-4 bg-red-50/80 border border-red-200/50 rounded-xl text-red-500 text-sm">
+                  <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-xl text-red-400 text-sm">
                     {submitError}
                   </div>
                 )}
                 <form onSubmit={handleSubmit} className="space-y-5">
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Full Name *</label>
-                      <input name="fullName" required placeholder="Your full name" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Full Name *</label>
+                      <input name="fullName" required placeholder="Your full name" className={inputCls} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Company Name *</label>
-                      <input name="companyName" required placeholder="Company name" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
-                    </div>
-                  </div>
-                  <div className="grid sm:grid-cols-2 gap-5">
-                    <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Designation *</label>
-                      <input name="designation" required placeholder="Your designation" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
-                    </div>
-                    <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Phone *</label>
-                      <input name="phone" required placeholder="Phone number" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Company Name *</label>
+                      <input name="companyName" required placeholder="Company name" className={inputCls} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Email *</label>
-                      <input name="email" type="email" required placeholder="your@email.com" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Designation *</label>
+                      <input name="designation" required placeholder="Your designation" className={inputCls} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">Website</label>
-                      <input name="website" placeholder="Company website" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Phone *</label>
+                      <input name="phone" required placeholder="Phone number" className={inputCls} />
                     </div>
                   </div>
                   <div className="grid sm:grid-cols-2 gap-5">
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">City *</label>
-                      <input name="city" required placeholder="City" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Email *</label>
+                      <input name="email" type="email" required placeholder="your@email.com" className={inputCls} />
                     </div>
                     <div>
-                      <label className="block text-sm font-medium text-navy mb-2">State *</label>
-                      <input name="state" required placeholder="State" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy placeholder:text-navy/30" />
+                      <label className={labelCls}>Website</label>
+                      <input name="website" placeholder="Company website" className={inputCls} />
+                    </div>
+                  </div>
+                  <div className="grid sm:grid-cols-2 gap-5">
+                    <div>
+                      <label className={labelCls}>City *</label>
+                      <input name="city" required placeholder="City" className={inputCls} />
+                    </div>
+                    <div>
+                      <label className={labelCls}>State *</label>
+                      <input name="state" required placeholder="State" className={inputCls} />
                     </div>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">Partnership Type *</label>
-                    <select name="partnershipType" required className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 text-navy">
-                      <option value="">Select Partnership Type</option>
+                    <label className={labelCls}>Partnership Type *</label>
+                    <select name="partnershipType" required className={`${inputCls} appearance-none`}>
+                      <option value="" className="bg-navy">Select Partnership Type</option>
                       {partnershipTypes.map((t) => (
-                        <option key={t.title} value={t.title}>{t.title}</option>
+                        <option key={t.title} value={t.title} className="bg-navy">{t.title}</option>
                       ))}
                     </select>
                   </div>
                   <div>
-                    <label className="block text-sm font-medium text-navy mb-2">Message</label>
-                    <textarea name="message" rows={4} placeholder="Describe your partnership proposal" className="w-full px-4 py-3 bg-ice/50 border border-silver/30 rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 resize-none text-navy placeholder:text-navy/30" />
+                    <label className={labelCls}>Message</label>
+                    <textarea name="message" rows={4} placeholder="Describe your partnership proposal" className={`${inputCls} resize-none`} />
                   </div>
                   <CTAButton type="submit" disabled={loading}>{loading ? 'Submitting...' : 'Submit Enquiry'}</CTAButton>
                 </form>
               </motion.div>
             ) : (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/80 backdrop-blur-sm rounded-3xl p-10 shadow-sm border border-silver/10 text-center">
-                <h3 className="font-heading font-bold text-navy text-2xl mb-4">Let&apos;s Collaborate</h3>
-                <p className="text-navy/60 mb-8 max-w-lg mx-auto">We&apos;re always open to new partnership opportunities. Submit your proposal and let&apos;s build something great together.</p>
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="bg-white/[0.03] backdrop-blur-sm rounded-3xl p-10 border border-white/[0.08] text-center">
+                <h3 className="heading-sm font-display font-bold text-white mb-4">Let&apos;s Collaborate</h3>
+                <p className="text-silver/60 mb-8 max-w-lg mx-auto">We&apos;re always open to new partnership opportunities. Submit your proposal and let&apos;s build something great together.</p>
                 <CTAButton onClick={() => setShowForm(true)}>Submit Partnership Enquiry</CTAButton>
               </motion.div>
             )}
           </div>
         </div>
-      </section>
+      </Section>
     </main>
   );
 }

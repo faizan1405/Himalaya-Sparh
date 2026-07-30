@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote, ChevronRight, Play } from 'lucide-react';
-import { SectionHeading, Card } from '@/components/public/Sections';
+import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
+import Link from 'next/link';
 
 interface Testimonial {
   _id: string;
@@ -16,7 +17,7 @@ interface Testimonial {
   videoUrl?: string;
   thumbnail?: string;
   purchaseType: string;
-  isVerified: boolean;
+  isFeatured: boolean;
 }
 
 export function TestimonialsSection() {
@@ -27,7 +28,6 @@ export function TestimonialsSection() {
     fetch('/api/content?type=testimonial')
       .then((r) => r.ok ? r.json() : [])
       .then((data: Testimonial[]) => {
-        // Prefer featured, then take the first 3
         const featured = data.filter((t) => t.isFeatured);
         setTestimonials(featured.length > 0 ? featured.slice(0, 3) : data.slice(0, 3));
         setLoading(false);
@@ -36,22 +36,19 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <section className="py-20 lg:py-28 bg-gradient-to-b from-white to-ice/30 relative overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.02] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-      <div className="absolute top-0 left-1/4 w-72 h-72 bg-aurora/5 rounded-full blur-3xl" />
-      <div className="absolute bottom-0 right-1/4 w-96 h-96 bg-aqua/5 rounded-full blur-3xl" />
-
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+    <Section id="testimonials" dark>
+      <div className="max-w-7xl mx-auto">
         <SectionHeading
           label="Testimonials"
           title="Trusted by Thousands of Families"
           subtitle="Real stories from real customers who trust Himalya Sparsh for pure Himalayan water."
+          lightTitle
         />
 
         {loading ? (
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="w-full h-72 bg-silver/10 rounded-2xl animate-pulse" style={{ animationDelay: `${i * 0.1}s` }} />
+              <div key={i} className="w-full h-72 bg-white/[0.03] rounded-2xl animate-pulse border border-white/[0.06]" style={{ animationDelay: `${i * 0.1}s` }} />
             ))}
           </div>
         ) : testimonials.length > 0 ? (
@@ -64,18 +61,17 @@ export function TestimonialsSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.12, duration: 0.6 }}
-                  className="group"
                 >
-                  <Card className="h-full flex flex-col relative overflow-hidden">
+                  <Card glow className="h-full flex flex-col relative overflow-hidden">
                     <div className="absolute top-4 right-4">
-                      <Quote className="w-8 h-8 text-aurora/10" />
+                      <Quote className="w-8 h-8 text-aurora/[0.07]" />
                     </div>
 
                     {t.reviewType === 'video' && t.thumbnail ? (
-                      <div className="aspect-video bg-ice/50 rounded-xl mb-5 flex items-center justify-center overflow-hidden relative">
+                      <div className="aspect-video bg-white/[0.03] rounded-xl mb-5 flex items-center justify-center overflow-hidden relative border border-white/[0.06]">
                         <img src={t.thumbnail} alt={t.customerName} className="w-full h-full object-cover" />
-                        <div className="absolute inset-0 bg-navy/30 group-hover:bg-navy/45 transition-colors flex items-center justify-center">
-                          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
+                        <div className="absolute inset-0 bg-navy/40 hover:bg-navy/55 transition-colors flex items-center justify-center cursor-pointer">
+                          <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:scale-110 transition-transform">
                             <Play className="w-5 h-5 text-white ml-0.5" />
                           </div>
                         </div>
@@ -85,25 +81,25 @@ export function TestimonialsSection() {
                         {Array.from({ length: 5 }).map((_, idx) => (
                           <Star
                             key={idx}
-                            className={`w-4 h-4 ${idx < t.rating ? 'text-yellow-400 fill-yellow-400' : 'text-navy/15'}`}
+                            className={`w-4 h-4 ${idx < t.rating ? 'text-gold fill-gold' : 'text-white/10'}`}
                           />
                         ))}
                       </div>
                     )}
 
                     <div className="relative flex-1">
-                      <p className="text-navy/70 text-sm leading-relaxed mb-5 line-clamp-3">
+                      <p className="text-silver/70 text-sm leading-relaxed mb-5 line-clamp-3">
                         &ldquo;{t.reviewText || 'Amazing product! Highly recommend.'}&rdquo;
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-silver/10">
+                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
                       <div>
-                        <p className="font-heading font-semibold text-navy text-sm">{t.customerName}</p>
-                        <p className="text-navy/50 text-xs">{t.city}{t.state ? `, ${t.state}` : ''}</p>
+                        <p className="font-display font-semibold text-white text-sm">{t.customerName}</p>
+                        <p className="text-silver/50 text-xs">{t.city}{t.state ? `, ${t.state}` : ''}</p>
                       </div>
-                      {t.isVerified && (
-                        <span className="text-[11px] bg-green-500/10 text-green-600 px-2.5 py-0.5 rounded-full font-medium">Verified</span>
+                      {t.isFeatured && (
+                        <span className="text-[11px] bg-aurora/10 text-aurora px-2.5 py-0.5 rounded-full font-semibold">Featured</span>
                       )}
                     </div>
                   </Card>
@@ -115,21 +111,23 @@ export function TestimonialsSection() {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mt-12"
+              className="text-center mt-14"
             >
-              <a
+              <Link
                 href="/testimonials/user-reviews"
                 className="inline-flex items-center gap-2 text-aurora font-semibold hover:gap-3 transition-all duration-300 group"
               >
                 View All Reviews
                 <ChevronRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </a>
+              </Link>
             </motion.div>
           </>
         ) : (
-          <p className="text-center text-navy/40 py-12">Customer testimonials coming soon.</p>
+          <div className="text-center py-16">
+            <p className="text-silver/40">Customer testimonials coming soon.</p>
+          </div>
         )}
       </div>
-    </section>
+    </Section>
   );
 }
