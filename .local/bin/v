@@ -1,0 +1,70 @@
+#!/usr/bin/env bash
+# vercel-accounts: switch between multiple Vercel accounts
+# Usage: v <account> <command...>   (e.g., v a deploy, v b whoami)
+#        v whoami-a                  (check which account "a" is)
+#        v list                      (show configured accounts)
+
+SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+ACCOUNTS_FILE="$PROJECT_ROOT/.local/accounts.json"
+
+# Ensure accounts file exists
+if [ ! -f "$ACCOUNTS_FILE" ]; then
+  echo "Error: $ACCOUNTS_FILE not found. Run 'npm run vercel:setup' first." >&2
+  exit 1
+fi
+
+# Resolve account token from accounts.json using Node.js
+resolve_token() {
+  local account="$1"
+  local token
+  token=$(node -e "const fs=require('fs');try{const d=JSON.parse(fs.readFileSync('$ACCOUNTS_FILE','utf8'));const t=d['$account'];if(!t){console.error('Account '$account' not found');process.exit(1)}console.log(t)}catch(e){console.error(e.message);process.exit(1)}" 2>&1)
+  if [ $? -ne 0 ] || [ -z "$token" ]; then
+    echo "$token"
+    exit 1
+  fi
+  echo "$token"
+}
+
+# Show account name from token using Vercel API
+resolve_name() {
+  local token="$1"
+  node -e "const https=require('https');const url=new URL('https://api.vercel.com/www/user');https.get(url,{headers:{'Authorization':'Bearer $token'}},r=>{let d='';r.on('data',c=>d+=c);r.on('end',()=>{try{const j=JSON.parse(d);console.log(j.username||j.email||j.name||'unknown')}catch{console.log('unknown')}})}).on('error',()=>console.log('unknown'))" 2>&1
+}
+
+# Handle special commands
+case "${1:-}" in
+  list|ls)
+    node -e "const fs=require('fs');const d=JSON.parse(fs.readFileSync('$ACCOUNTS_FILE','utf8'));const tokens=Object.keys(d);if(!tokens.length){console.log('No accounts configured. Edit .local/accounts.json to add tokens.');process.exit(0)}const https=require('https');const pending=tokens.length;let done=0;const async=require('async');async.each(tokens,(acc,cb)=>{const url=new URL('https://api.vercel.com/www/user');https.get(url,{headers:{'Authorization':'Bearer '+d[acc]}},r=>{let body='';r.on('data',c=>body+=c);r.on('end',()=>{try{const j=JSON.parse(body);console.log('  '+acc+': '+((j.username||j.email||j.name||acc).padEnd(20))+'('+d[acc].slice(0,8)+'...)')}catch{console.log('  '+acc+': '+acc+' ('+d[acc].slice(0,8)+'...) [auth check failed]')}cb()})}).on('error',()=>{console.log('  '+acc+': '+acc+' ('+d[acc].slice(0,8)+'...) [connection error]');cb()})},()=>{})" 2>&1
+    exit 0
+    ;;
+  whoami-*)
+    account="${1#whoami-}"
+    token=$(resolve_token "$account")
+    VERCEL_TOKEN="$token" vercel whoami 2>&1
+    exit $?
+    ;;
+esac
+
+if [ -z "$1" ]; then
+  echo "Usage: v <a|b> <vercel-command>"
+  echo "       v list                    list configured accounts"
+  echo "       v whoami-a / v whoami-b   check account identity"
+  echo ""
+  echo "Examples:"
+  echo "  v a deploy              deploy with account A"
+  echo "  v b deploy --prod       deploy to production with account B"
+  echo "  v a whoami              check which user account A is"
+  exit 1
+fi
+
+if [ -z "$2" ]; then
+  echo "Error: No vercel command specified." >&2
+  echo "Usage: v <a|b> <vercel-command> [args...]" >&2
+  exit 1
+fi
+
+account="$1"
+shift
+token=$(resolve_token "$account")
+VERCEL_TOKEN="$token" vercel "$@"

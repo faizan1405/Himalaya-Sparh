@@ -6,7 +6,13 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "v": "./.local/bin/v",
+    "v:a": "./.local/bin/v a",
+    "v:b": "./.local/bin/v b",
+    "v:list": "./.local/bin/v list",
+    "v:whoami-a": "./.local/bin/v a whoami",
+    "v:whoami-b": "./.local/bin/v b whoami"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.5.7",
