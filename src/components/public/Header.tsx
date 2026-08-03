@@ -14,7 +14,7 @@ const navItems = [
     label: 'About Us',
     children: [
       { label: 'Our Story', href: '/about/introduction' },
-      { label: 'Why We Need This', href: '/about/introduction' },
+      { label: 'Why We Need It', href: '/why-we-need-it' },
       { label: 'Leadership', href: '/about/leadership' },
     ],
   },
@@ -26,6 +26,7 @@ const navItems = [
     ],
   },
   { label: 'How It Works', href: '/how-it-works' },
+  { label: 'Why We Need It', href: '/why-we-need-it' },
   {
     label: 'Testimonials',
     children: [
