@@ -159,25 +159,39 @@ function GlassCard({
    Hero
    ───────────────────────────────────────────────────────── */
 
+import Image from 'next/image';
+
 function Hero() {
   const ref = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end start'] });
   const yMountains = useTransform(scrollYProgress, [0, 1], [0, 120]);
   const yParticles = useTransform(scrollYProgress, [0, 1], [0, -60]);
+  const bgY = useTransform(scrollYProgress, [0, 1], ['0%', '20%']);
 
   return (
     <section
       ref={ref}
       className="relative isolate overflow-hidden pt-36 pb-32 lg:pt-44 lg:pb-40"
     >
-      {/* Base gradient */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy via-midnight to-navy" />
-      <div className="absolute inset-0 bg-gradient-radial" />
+      {/* Background Image & Overlays */}
+      <motion.div style={{ y: bgY }} className="absolute inset-0 z-0 pointer-events-none">
+        <Image
+          src="/images/bgs/why-we-need-it.png"
+          alt="Pristine Mountain Spring Water"
+          fill
+          priority
+          sizes="100vw"
+          quality={90}
+          className="object-cover object-center opacity-40"
+        />
+      </motion.div>
+      <div className="absolute inset-0 bg-gradient-to-b from-navy/90 via-midnight/80 to-navy z-[1] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-radial z-[1] pointer-events-none" />
 
       {/* Glow orbs */}
-      <GlowOrb className="top-[-10%] left-[-10%] w-[520px] h-[520px] bg-aurora/15" />
-      <GlowOrb className="bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-aqua/15" />
-      <GlowOrb className="top-[30%] left-[40%] w-[300px] h-[300px] bg-aurora/8" />
+      <GlowOrb className="top-[-10%] left-[-10%] w-[520px] h-[520px] bg-aurora/15 z-[1]" />
+      <GlowOrb className="bottom-[-20%] right-[-10%] w-[600px] h-[600px] bg-aqua/15 z-[1]" />
+      <GlowOrb className="top-[30%] left-[40%] w-[300px] h-[300px] bg-aurora/8 z-[1]" />
 
       {/* Floating particles */}
       <motion.div style={{ y: yParticles }} className="absolute inset-0 pointer-events-none">

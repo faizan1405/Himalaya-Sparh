@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion';
 import { Droplets, Shield, Globe, Zap, Leaf, Clock } from 'lucide-react';
 import { Section, SectionHeading, Card } from '@/components/public/Sections';
+import { BackgroundSection } from '@/components/public/BackgroundSection';
 
 const features = [
   { icon: Droplets, title: 'Pure Water', description: 'Advanced filtration ensuring Himalayan-grade purity in every drop.' },
@@ -15,8 +16,16 @@ const features = [
 
 export function FeaturesSection() {
   return (
-    <Section id="features" dark>
-      <div className="max-w-7xl mx-auto">
+    <BackgroundSection
+      id="features"
+      imageSrc="/images/bgs/water-caustics.png"
+      imageAlt="Pristine Water Mineral Caustics"
+      overlay="gradient"
+      opacity={0.25}
+      blur="sm"
+      className="section-lg"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           label="Device Highlights"
           title="Every Feature, Purposefully Designed"
@@ -33,14 +42,14 @@ export function FeaturesSection() {
               viewport={{ once: true }}
               transition={{ delay: i * 0.08, duration: 0.6 }}
             >
-              <Card glow>
-                <div className="w-14 h-14 bg-gradient-to-br from-aurora/10 to-aqua/10 rounded-xl flex items-center justify-center mb-6 group-hover:from-aurora/20 group-hover:to-aqua/20 transition-all duration-500">
+              <Card glow className="glass-medium hover:border-aurora/30">
+                <div className="w-14 h-14 bg-gradient-to-br from-aurora/15 to-aqua/15 rounded-xl flex items-center justify-center mb-6 group-hover:from-aurora/30 group-hover:to-aqua/30 transition-all duration-500">
                   <feature.icon className="w-7 h-7 text-aurora" />
                 </div>
                 <h3 className="font-display font-semibold text-white text-lg mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-silver/60 text-sm leading-relaxed">
+                <p className="text-silver/70 text-sm leading-relaxed">
                   {feature.description}
                 </p>
               </Card>
@@ -48,6 +57,7 @@ export function FeaturesSection() {
           ))}
         </div>
       </div>
-    </Section>
+    </BackgroundSection>
   );
 }
+

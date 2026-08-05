@@ -3,7 +3,8 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Quote, ChevronRight, Play } from 'lucide-react';
-import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
+import { SectionHeading, Card } from '@/components/public/Sections';
+import { BackgroundSection } from '@/components/public/BackgroundSection';
 import Link from 'next/link';
 
 interface Testimonial {
@@ -26,7 +27,7 @@ export function TestimonialsSection() {
 
   useEffect(() => {
     fetch('/api/content?type=testimonial')
-      .then((r) => r.ok ? r.json() : [])
+      .then((r) => (r.ok ? r.json() : []))
       .then((data: Testimonial[]) => {
         const featured = data.filter((t) => t.isFeatured);
         setTestimonials(featured.length > 0 ? featured.slice(0, 3) : data.slice(0, 3));
@@ -36,8 +37,16 @@ export function TestimonialsSection() {
   }, []);
 
   return (
-    <Section id="testimonials" dark>
-      <div className="max-w-7xl mx-auto">
+    <BackgroundSection
+      id="testimonials"
+      imageSrc="/images/bgs/user-reviews.png"
+      imageAlt="Satisfied Customer Lifestyle Atmosphere"
+      overlay="gradient"
+      opacity={0.3}
+      blur="md"
+      className="section-lg"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           label="Testimonials"
           title="Trusted by Thousands of Families"
@@ -48,7 +57,11 @@ export function TestimonialsSection() {
         {loading ? (
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {Array.from({ length: 3 }).map((_, i) => (
-              <div key={i} className="w-full h-72 bg-white/[0.03] rounded-2xl animate-pulse border border-white/[0.06]" style={{ animationDelay: `${i * 0.1}s` }} />
+              <div
+                key={i}
+                className="w-full h-72 bg-white/[0.03] rounded-2xl animate-pulse border border-white/[0.06]"
+                style={{ animationDelay: `${i * 0.1}s` }}
+              />
             ))}
           </div>
         ) : testimonials.length > 0 ? (
@@ -62,9 +75,9 @@ export function TestimonialsSection() {
                   viewport={{ once: true }}
                   transition={{ delay: i * 0.12, duration: 0.6 }}
                 >
-                  <Card glow className="h-full flex flex-col relative overflow-hidden">
+                  <Card glow className="h-full flex flex-col relative overflow-hidden glass-medium">
                     <div className="absolute top-4 right-4">
-                      <Quote className="w-8 h-8 text-aurora/[0.07]" />
+                      <Quote className="w-8 h-8 text-aurora/[0.12]" />
                     </div>
 
                     {t.reviewType === 'video' && t.thumbnail ? (
@@ -88,18 +101,23 @@ export function TestimonialsSection() {
                     )}
 
                     <div className="relative flex-1">
-                      <p className="text-silver/70 text-sm leading-relaxed mb-5 line-clamp-3">
+                      <p className="text-silver/80 text-sm leading-relaxed mb-5 line-clamp-3">
                         &ldquo;{t.reviewText || 'Amazing product! Highly recommend.'}&rdquo;
                       </p>
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
+                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.08]">
                       <div>
                         <p className="font-display font-semibold text-white text-sm">{t.customerName}</p>
-                        <p className="text-silver/50 text-xs">{t.city}{t.state ? `, ${t.state}` : ''}</p>
+                        <p className="text-silver/50 text-xs">
+                          {t.city}
+                          {t.state ? `, ${t.state}` : ''}
+                        </p>
                       </div>
                       {t.isFeatured && (
-                        <span className="text-[11px] bg-aurora/10 text-aurora px-2.5 py-0.5 rounded-full font-semibold">Featured</span>
+                        <span className="text-[11px] bg-aurora/10 text-aurora px-2.5 py-0.5 rounded-full font-semibold">
+                          Featured
+                        </span>
                       )}
                     </div>
                   </Card>
@@ -124,10 +142,10 @@ export function TestimonialsSection() {
           </>
         ) : (
           <div className="text-center py-16">
-            <p className="text-silver/40">Customer testimonials coming soon.</p>
+            <p className="text-silver/50">Customer testimonials coming soon.</p>
           </div>
         )}
       </div>
-    </Section>
+    </BackgroundSection>
   );
 }

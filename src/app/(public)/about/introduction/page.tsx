@@ -1,8 +1,10 @@
 'use client';
 
 import { motion } from 'framer-motion';
-import { AlertTriangle, Recycle, FlaskConical, Globe, HeartPulse, DollarSign, Check, Droplets } from 'lucide-react';
-import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
+import { AlertTriangle, Recycle, FlaskConical, Globe, HeartPulse, DollarSign, Check } from 'lucide-react';
+import { SectionHeading, Card, CTAButton } from '@/components/public/Sections';
+import { ParallaxHero } from '@/components/public/ParallaxHero';
+import { BackgroundSection } from '@/components/public/BackgroundSection';
 
 const problems = [
   {
@@ -60,8 +62,16 @@ const labelColors: Record<string, { bg: string; text: string; border: string }> 
 
 function WhyWeNeedSection() {
   return (
-    <Section id="why-we-need" dark>
-      <div className="max-w-7xl mx-auto">
+    <BackgroundSection
+      id="why-we-need"
+      imageSrc="/images/bgs/why-we-need-it.png"
+      imageAlt="Pristine Himalayan Water Stream"
+      overlay="deep"
+      opacity={0.35}
+      blur="sm"
+      className="section-lg"
+    >
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <SectionHeading
           label="The Problem We Solve"
           title="Why We Need This"
@@ -80,21 +90,23 @@ function WhyWeNeedSection() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.08 }}
               >
-                <Card glow className="overflow-hidden h-full">
-                  <div className="divide-y divide-white/[0.06]">
+                <Card glow className="overflow-hidden h-full glass-medium">
+                  <div className="divide-y divide-white/[0.08]">
                     {/* Problem */}
                     <div className="p-5">
                       <div className="w-10 h-10 bg-white/[0.04] rounded-xl flex items-center justify-center mb-4">
                         <item.icon className="w-5 h-5 text-silver/70" />
                       </div>
-                      <span className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${colors.bg} ${colors.text} mb-3 border ${colors.border}`}>
+                      <span
+                        className={`inline-block px-2.5 py-0.5 rounded-full text-[10px] font-semibold uppercase tracking-wider ${colors.bg} ${colors.text} mb-3 border ${colors.border}`}
+                      >
                         Problem
                       </span>
                       <h3 className="font-display font-bold text-white text-lg mb-2">{item.problem}</h3>
-                      <p className="text-silver/60 text-sm leading-relaxed">{item.problemDesc}</p>
+                      <p className="text-silver/70 text-sm leading-relaxed">{item.problemDesc}</p>
                     </div>
                     {/* Solution */}
-                    <div className="p-5 bg-aurora/[0.02]">
+                    <div className="p-5 bg-aurora/[0.03]">
                       <div className="w-10 h-10 bg-aurora/10 rounded-xl flex items-center justify-center mb-4">
                         <Check className="w-5 h-5 text-aurora" />
                       </div>
@@ -102,7 +114,7 @@ function WhyWeNeedSection() {
                         Solution
                       </span>
                       <h3 className="font-display font-bold text-aurora text-lg mb-2">Our Solution</h3>
-                      <p className="text-silver/60 text-sm leading-relaxed">{item.solution}</p>
+                      <p className="text-silver/70 text-sm leading-relaxed">{item.solution}</p>
                     </div>
                   </div>
                 </Card>
@@ -112,12 +124,12 @@ function WhyWeNeedSection() {
         </div>
 
         <div className="mt-12 text-center">
-          <CTAButton href="/buy" variant="secondary" arrow>
+          <CTAButton href="/buy" variant="primary" arrow>
             Get Your Device
           </CTAButton>
         </div>
       </div>
-    </Section>
+    </BackgroundSection>
   );
 }
 
@@ -125,27 +137,29 @@ export default function AboutIntroductionPage() {
   return (
     <main>
       {/* Hero */}
-      <section className="relative py-24 lg:py-36 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-        <div className="absolute top-1/4 left-1/4 w-[400px] h-[400px] bg-aurora/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 right-1/4 w-[300px] h-[300px] bg-aqua/10 rounded-full blur-[100px]" />
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <span className="inline-block px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] text-aurora text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
+      <ParallaxHero
+        imageSrc="/images/bgs/about-intro.png"
+        imageAlt="Himalayan Springs and Valley Landscape"
+        badge={
+          <span className="inline-block px-4 py-1.5 bg-white/[0.06] border border-white/[0.12] text-aurora text-sm font-medium rounded-full backdrop-blur-md">
             About Us
           </span>
-          <h1 className="heading-xl font-display font-bold text-white mb-6 leading-tight tracking-tight text-balance">
-            Our Story
-          </h1>
-          <p className="text-body-lg text-silver/70 font-light">
-            Born from the Himalayas, powered by science
-          </p>
-        </div>
-      </section>
+        }
+        title="Our Story"
+        subtitle="Born from the Himalayas, powered by science"
+        description="Every drop of water tells the story of pristine peaks, ancient rivers, and our commitment to delivering pure, structured water to your doorstep."
+      />
 
       {/* Core values */}
-      <Section dark>
-        <div className="max-w-7xl mx-auto">
+      <BackgroundSection
+        imageSrc="/images/bgs/water-caustics.png"
+        imageAlt="Pure Water Foundation"
+        overlay="gradient"
+        opacity={0.25}
+        blur="sm"
+        className="section-lg"
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <SectionHeading
             label="Our Foundation"
             title="Core Values"
@@ -178,28 +192,28 @@ export default function AboutIntroductionPage() {
                 viewport={{ once: true }}
                 transition={{ delay: i * 0.15, duration: 0.7 }}
               >
-                <Card glow className="h-full text-center">
+                <Card glow className="h-full text-center glass-medium">
                   <div className="text-5xl mb-6 leading-none">{item.icon}</div>
                   <h2 className="heading-md font-display font-bold text-white mb-4">{item.title}</h2>
-                  <p className="text-silver/60 leading-relaxed">{item.text}</p>
+                  <p className="text-silver/70 leading-relaxed">{item.text}</p>
                 </Card>
               </motion.div>
             ))}
           </div>
         </div>
-      </Section>
+      </BackgroundSection>
 
       {/* Why We Need This */}
       <WhyWeNeedSection />
 
       {/* Full-width statement */}
-      <Section dark>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
+      <section className="relative py-24 bg-gradient-to-b from-navy to-midnight overflow-hidden">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
           <motion.blockquote
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="heading-md font-display text-silver/70 leading-relaxed"
+            className="heading-md font-display text-silver/80 leading-relaxed"
           >
             &ldquo;By the Himalaya, from the Himalayas. Every drop of water tells the story of pristine peaks, ancient rivers, and our commitment to delivering that purity to your doorstep.&rdquo;
           </motion.blockquote>
@@ -211,7 +225,7 @@ export default function AboutIntroductionPage() {
             className="mt-8 w-16 h-0.5 bg-gradient-to-r from-aurora to-aqua mx-auto rounded-full"
           />
         </div>
-      </Section>
+      </section>
     </main>
   );
 }

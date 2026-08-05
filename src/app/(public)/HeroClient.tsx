@@ -6,6 +6,10 @@ import Link from 'next/link';
 import { ArrowDown, Sparkles, Shield, Zap } from 'lucide-react';
 import { CTAButton } from '@/components/public/Sections';
 
+import Image from 'next/image';
+import { useScroll, useTransform } from 'framer-motion';
+import { useRef } from 'react';
+
 interface HeroData {
   heading: string;
   subheading: string;
@@ -30,6 +34,15 @@ const fadeUp = {
 
 export default function HeroClient() {
   const [data, setData] = useState<HeroData | null>(null);
+  const containerRef = useRef<HTMLElement>(null);
+
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ['start start', 'end start'],
+  });
+
+  const backgroundY = useTransform(scrollYProgress, [0, 1], ['0%', '25%']);
+  const backgroundScale = useTransform(scrollYProgress, [0, 1], [1, 1.1]);
 
   useEffect(() => {
     fetch('/api/content/hero')
@@ -39,25 +52,36 @@ export default function HeroClient() {
   }, []);
 
   return (
-    <section className="relative min-h-screen flex items-center overflow-hidden bg-hero">
-      {/* Background layers */}
-      <div className="absolute inset-0 bg-gradient-to-b from-navy via-deep to-navy" />
-      <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat bg-center" />
+    <section ref={containerRef} className="relative min-h-screen flex items-center overflow-hidden bg-hero">
+      {/* Parallax Hero Background Image */}
+      <motion.div
+        style={{ y: backgroundY, scale: backgroundScale }}
+        className="absolute inset-0 z-0 pointer-events-none origin-center"
+      >
+        <Image
+          src={data?.bgImage || '/images/bgs/hero-himalaya.png'}
+          alt="Majestic Himalayan Peaks and Pristine Water"
+          fill
+          priority
+          sizes="100vw"
+          quality={90}
+          className="object-cover object-center opacity-45"
+        />
+      </motion.div>
 
-      {/* Decorative orbs — deep, atmospheric */}
-      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-aurora/[0.06] rounded-full blur-[140px]" />
-      <div className="absolute bottom-[-15%] left-[-10%] w-[700px] h-[700px] bg-aqua/[0.04] rounded-full blur-[160px]" />
-      <div className="absolute top-[30%] left-[40%] w-[400px] h-[400px] bg-aurora/[0.03] rounded-full blur-[120px]" />
-
-      {/* Subtle grid */}
+      {/* Dark & Gradient Overlays for Perfect Contrast */}
+      <div className="absolute inset-0 bg-gradient-to-b from-navy/90 via-navy/70 to-navy z-[1] pointer-events-none" />
       <div
-        className="absolute inset-0 opacity-[0.025]"
+        className="absolute inset-0 z-[2] opacity-75 pointer-events-none"
         style={{
-          backgroundImage:
-            'linear-gradient(rgba(255,255,255,0.08) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.08) 1px, transparent 1px)',
-          backgroundSize: '80px 80px',
+          background: 'radial-gradient(circle at center, transparent 20%, rgba(8, 15, 26, 0.85) 100%)',
         }}
       />
+
+      {/* Decorative orbs — deep, atmospheric */}
+      <div className="absolute top-[-10%] right-[-5%] w-[600px] h-[600px] bg-aurora/[0.06] rounded-full blur-[140px] z-[2]" />
+      <div className="absolute bottom-[-15%] left-[-10%] w-[700px] h-[700px] bg-aqua/[0.04] rounded-full blur-[160px] z-[2]" />
+      <div className="absolute top-[30%] left-[40%] w-[400px] h-[400px] bg-aurora/[0.03] rounded-full blur-[120px] z-[2]" />
 
       <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full pt-20">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">

@@ -3,8 +3,9 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Star, Play, Quote } from 'lucide-react';
-import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
-import Link from 'next/link';
+import { Card, CTAButton } from '@/components/public/Sections';
+import { ParallaxHero } from '@/components/public/ParallaxHero';
+import { BackgroundSection } from '@/components/public/BackgroundSection';
 
 interface Testimonial {
   _id: string;
@@ -20,8 +21,9 @@ interface Testimonial {
   isVerified: boolean;
 }
 
-const inputCls = "w-full px-4 py-3 bg-white/[0.03] border border-white/[0.08] rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 focus:border-aurora/40 text-white placeholder:text-silver/30 transition-colors";
-const labelCls = "block text-sm font-medium text-silver mb-2";
+const inputCls =
+  'w-full px-4 py-3 bg-white/[0.04] border border-white/[0.08] rounded-xl focus:outline-none focus:ring-2 focus:ring-aurora/40 focus:border-aurora/40 text-white placeholder:text-silver/30 transition-colors';
+const labelCls = 'block text-sm font-medium text-silver mb-2';
 
 export default function UserTestimonialsPage() {
   const [testimonials, setTestimonials] = useState<Testimonial[]>([]);
@@ -39,8 +41,14 @@ export default function UserTestimonialsPage() {
         if (!r.ok) throw new Error(`HTTP ${r.status}`);
         return r.json();
       })
-      .then((data) => { setTestimonials(data || []); setLoading(false); })
-      .catch((err) => { setError(err.message); setLoading(false); });
+      .then((data) => {
+        setTestimonials(data || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        setError(err.message);
+        setLoading(false);
+      });
   }, []);
 
   const filtered = filter === 'all' ? testimonials : testimonials.filter((t) => t.reviewType === filter);
@@ -58,176 +66,220 @@ export default function UserTestimonialsPage() {
           customerName: formData.get('customerName'),
           city: formData.get('city'),
           state: formData.get('state'),
-          rating: formData.get('rating'),
+          rating: Number(formData.get('rating') || 5),
           reviewText: formData.get('reviewText'),
-          purchaseType: formData.get('purchaseType'),
+          purchaseType: formData.get('purchaseType') || 'Standard',
         }),
       });
       const data = await res.json();
-      if (res.ok) {
+      if (data.success) {
         setSubmitted(true);
-        (e.target as HTMLFormElement).reset();
+        setShowForm(false);
       } else {
-        setSubmitError(data.error || 'Failed to submit. Please try again.');
+        setSubmitError(data.error || 'Failed to submit review.');
       }
     } catch {
-      setSubmitError('Failed to submit. Please try again.');
+      setSubmitError('Failed to submit review. Please try again.');
     } finally {
       setFormLoading(false);
     }
   };
 
-  if (loading) {
-    return (
-      <main>
-        <section className="py-20">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="w-64 h-10 bg-white/[0.04] rounded animate-pulse mx-auto mb-4" />
-            <div className="w-full max-w-2xl h-6 bg-white/[0.04] rounded animate-pulse mx-auto mb-12" />
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {Array.from({ length: 6 }).map((_, i) => (
-                <div key={i} className="w-full h-72 bg-white/[0.03] rounded-2xl animate-pulse border border-white/[0.06]" style={{ animationDelay: `${i * 0.1}s` }} />
-              ))}
-            </div>
-          </div>
-        </section>
-      </main>
-    );
-  }
-
   return (
     <main>
       {/* Hero */}
-      <section className="relative py-24 lg:py-32 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-        <div className="absolute top-0 right-1/4 w-[400px] h-[400px] bg-aurora/10 rounded-full blur-[120px]" />
-        <div className="absolute bottom-0 left-1/4 w-[300px] h-[300px] bg-aqua/10 rounded-full blur-[100px]" />
-
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative">
-          <span className="inline-block px-4 py-1.5 bg-white/[0.04] border border-white/[0.08] text-aurora text-sm font-medium rounded-full mb-6 backdrop-blur-sm">
-            Testimonials
+      <ParallaxHero
+        imageSrc="/images/bgs/user-reviews.png"
+        imageAlt="Serene Luxury Living Atmosphere"
+        badge={
+          <span className="inline-block px-4 py-1.5 bg-white/[0.06] border border-white/[0.12] text-aurora text-sm font-medium rounded-full backdrop-blur-md">
+            Customer Reviews
           </span>
-          <h1 className="heading-xl font-display font-bold text-white mb-6 leading-tight tracking-tight text-balance">
-            What Our Customers Say
-          </h1>
-          <p className="text-body-md text-silver/70 max-w-2xl mx-auto leading-relaxed">
-            Real stories from real customers who trust Himalya Sparsh for pure Himalayan water.
-          </p>
-        </div>
-      </section>
+        }
+        title="Real Stories, Pure Hydration"
+        subtitle="Read and watch authentic experiences from thousands of happy households"
+        description="Discover how Himalya Sparsh has enhanced daily health, hydration, and peace of mind for families across the nation."
+      />
 
-      {/* Testimonials Section */}
-      <Section id="testimonials" dark>
+      {/* Reviews section */}
+      <BackgroundSection
+        id="reviews"
+        imageSrc="/images/bgs/water-caustics.png"
+        imageAlt="Customer Review Caustics Matrix"
+        overlay="gradient"
+        opacity={0.25}
+        blur="sm"
+        className="section-lg"
+      >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          {error && (
-            <div className="text-center text-red-400 py-8 bg-red-500/10 rounded-2xl border border-red-500/20">{error}</div>
-          )}
-
-          {/* Filters */}
-          <div className="flex gap-3 justify-center mb-12">
-            {[
-              { key: 'all', label: 'All Reviews' },
-              { key: 'video', label: 'Video Reviews' },
-              { key: 'written', label: 'Written Reviews' },
-            ].map((type) => (
-              <button
-                key={type.key}
-                onClick={() => setFilter(type.key)}
-                className={`px-5 py-2.5 rounded-full text-sm font-medium transition-all ${
-                  filter === type.key
-                    ? 'bg-gradient-to-r from-aurora to-aqua text-white shadow-lg shadow-aurora/20'
-                    : 'bg-white/[0.03] text-silver/70 border border-white/[0.08] hover:border-aurora/20'
-                }`}
-              >
-                {type.label}
-              </button>
-            ))}
-          </div>
-
-          {/* Testimonials Grid */}
-          {filtered.length > 0 ? (
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {filtered.map((t, i) => (
-                <motion.div
-                  key={t._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: i * 0.08 }}
+          {/* Controls bar */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 mb-12">
+            <div className="flex items-center gap-2">
+              {[
+                { id: 'all', label: 'All Reviews' },
+                { id: 'video', label: 'Video Reviews' },
+                { id: 'written', label: 'Written Stories' },
+              ].map((tab) => (
+                <button
+                  key={tab.id}
+                  onClick={() => setFilter(tab.id)}
+                  className={`px-5 py-2.5 rounded-full text-xs font-semibold tracking-wider transition-all duration-300 ${
+                    filter === tab.id
+                      ? 'bg-gradient-to-r from-aurora to-aqua text-white shadow-lg shadow-aurora/20'
+                      : 'bg-white/[0.04] text-silver/70 border border-white/[0.08] hover:bg-white/[0.08] hover:text-white'
+                  }`}
                 >
-                  <Card glow className="h-full flex flex-col">
-                    {t.reviewType === 'video' ? (
-                      <div className="aspect-video bg-white/[0.03] rounded-xl mb-4 flex items-center justify-center overflow-hidden relative group border border-white/[0.06]">
-                        {t.thumbnail ? (
-                          <>
-                            <img src={t.thumbnail} alt={t.customerName} className="w-full h-full object-cover" />
-                            <div className="absolute inset-0 bg-navy/40 group-hover:bg-navy/50 transition-colors flex items-center justify-center">
-                              <div className="w-14 h-14 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                                <Play className="w-6 h-6 text-white ml-1" />
-                              </div>
-                            </div>
-                          </>
-                        ) : (
-                          <div className="w-14 h-14 bg-aurora/10 rounded-full flex items-center justify-center group-hover:scale-110 transition-transform">
-                            <Play className="w-6 h-6 text-aurora ml-1" />
-                          </div>
-                        )}
-                      </div>
-                    ) : (
-                      <div className="flex items-center gap-1 mb-4">
-                        {Array.from({ length: 5 }).map((_, idx) => (
-                          <Star
-                            key={idx}
-                            className={`w-4 h-4 ${idx < t.rating ? 'text-gold fill-gold' : 'text-white/10'}`}
-                          />
-                        ))}
-                      </div>
-                    )}
-
-                    <div className="relative flex-1">
-                      <Quote className="w-8 h-8 text-aurora/10 absolute -top-1 -left-1" />
-                      <p className="text-silver/70 text-sm leading-relaxed mb-4 relative z-10">
-                        &ldquo;{t.reviewText || 'Amazing product! Highly recommend.'}&rdquo;
-                      </p>
-                    </div>
-
-                    <div className="flex items-center justify-between pt-4 border-t border-white/[0.06]">
-                      <div>
-                        <p className="font-display font-semibold text-white">{t.customerName}</p>
-                        <p className="text-silver/50 text-xs">{t.city}, {t.state}</p>
-                      </div>
-                      {t.isVerified && (
-                        <span className="text-xs bg-green-500/10 text-green-400 px-3 py-1 rounded-full font-medium border border-green-500/20">Verified</span>
-                      )}
-                    </div>
-                  </Card>
-                </motion.div>
+                  {tab.label}
+                </button>
               ))}
             </div>
-          ) : !error && (
-            <div className="text-center text-silver/40 py-16 bg-white/[0.02] rounded-2xl border border-white/[0.06]">
-              <Quote className="w-12 h-12 text-silver/20 mx-auto mb-4" />
-              <p>Customer testimonials will be displayed once added via admin panel.</p>
+
+            <CTAButton onClick={() => setShowForm(!showForm)} variant="secondary" className="!text-xs !py-2.5">
+              {showForm ? 'Close Form' : 'Share Your Experience'}
+            </CTAButton>
+          </div>
+
+          {/* Submission Feedback */}
+          {submitted && (
+            <div className="mb-12 p-6 glass-strong rounded-2xl border border-green-500/30 text-center text-green-400">
+              Thank you for sharing your experience! Your review has been submitted for verification.
             </div>
           )}
 
-          {/* Share your experience CTA */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mt-14"
-          >
-            <Link
-              href="/testimonials/user-reviews"
-              className="inline-flex items-center gap-2 text-aurora font-semibold hover:gap-3 transition-all duration-300 group"
+          {/* Review Form Drawer */}
+          {showForm && (
+            <motion.div
+              initial={{ opacity: 0, height: 0 }}
+              animate={{ opacity: 1, height: 'auto' }}
+              exit={{ opacity: 0, height: 0 }}
+              className="mb-16 glass-medium rounded-3xl p-8 lg:p-12 border border-white/[0.12]"
             >
-              Share Your Experience
-              <Play className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </motion.div>
+              <h2 className="heading-sm font-display font-bold text-white mb-6">Write a Review</h2>
+              {submitError && <p className="text-red-400 text-sm mb-4">{submitError}</p>}
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid sm:grid-cols-3 gap-6">
+                  <div>
+                    <label className={labelCls}>Your Name</label>
+                    <input name="customerName" required placeholder="Full Name" className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>City</label>
+                    <input name="city" required placeholder="City" className={inputCls} />
+                  </div>
+                  <div>
+                    <label className={labelCls}>State</label>
+                    <input name="state" placeholder="State" className={inputCls} />
+                  </div>
+                </div>
+
+                <div className="grid sm:grid-cols-2 gap-6">
+                  <div>
+                    <label className={labelCls}>Rating</label>
+                    <select name="rating" defaultValue="5" className={inputCls}>
+                      <option value="5" className="bg-navy">
+                        5 Stars - Excellent
+                      </option>
+                      <option value="4" className="bg-navy">
+                        4 Stars - Very Good
+                      </option>
+                      <option value="3" className="bg-navy">
+                        3 Stars - Average
+                      </option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className={labelCls}>Purchase Context</label>
+                    <input name="purchaseType" placeholder="Home / Office / Gift" className={inputCls} />
+                  </div>
+                </div>
+
+                <div>
+                  <label className={labelCls}>Your Story &amp; Experience</label>
+                  <textarea
+                    name="reviewText"
+                    rows={4}
+                    required
+                    placeholder="Tell us how Himalya Sparsh has improved your daily water experience..."
+                    className={inputCls}
+                  />
+                </div>
+
+                <CTAButton type="submit" disabled={formLoading} variant="primary">
+                  {formLoading ? 'Submitting...' : 'Submit Review'}
+                </CTAButton>
+              </form>
+            </motion.div>
+          )}
+
+          {error && <div className="text-center text-red-400 py-8">{error}</div>}
+
+          {/* Reviews Grid */}
+          <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
+            {filtered.length > 0
+              ? filtered.map((t, i) => (
+                  <motion.div
+                    key={t._id}
+                    initial={{ opacity: 0, y: 30 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.08, duration: 0.6 }}
+                  >
+                    <Card glow className="glass-medium h-full flex flex-col justify-between relative overflow-hidden">
+                      <div className="absolute top-4 right-4">
+                        <Quote className="w-8 h-8 text-aurora/[0.12]" />
+                      </div>
+
+                      <div>
+                        {t.reviewType === 'video' && t.thumbnail ? (
+                          <div className="aspect-video bg-white/[0.03] rounded-xl mb-5 flex items-center justify-center overflow-hidden relative border border-white/[0.06]">
+                            <img src={t.thumbnail} alt={t.customerName} className="w-full h-full object-cover" />
+                            <div className="absolute inset-0 bg-navy/40 hover:bg-navy/55 transition-colors flex items-center justify-center cursor-pointer">
+                              <div className="w-12 h-12 bg-white/20 backdrop-blur-sm rounded-full flex items-center justify-center hover:scale-110 transition-transform">
+                                <Play className="w-5 h-5 text-white ml-0.5" />
+                              </div>
+                            </div>
+                          </div>
+                        ) : (
+                          <div className="flex items-center gap-1 mb-4">
+                            {Array.from({ length: 5 }).map((_, idx) => (
+                              <Star
+                                key={idx}
+                                className={`w-4 h-4 ${idx < t.rating ? 'text-gold fill-gold' : 'text-white/10'}`}
+                              />
+                            ))}
+                          </div>
+                        )}
+
+                        <p className="text-silver/80 text-sm leading-relaxed mb-6">
+                          &ldquo;{t.reviewText || 'Exceptional water purity and taste!'}&rdquo;
+                        </p>
+                      </div>
+
+                      <div className="pt-4 border-t border-white/[0.08] flex items-center justify-between">
+                        <div>
+                          <p className="font-display font-semibold text-white text-sm">{t.customerName}</p>
+                          <p className="text-silver/50 text-xs">
+                            {t.city}
+                            {t.state ? `, ${t.state}` : ''}
+                          </p>
+                        </div>
+                        {t.isVerified && (
+                          <span className="text-[11px] bg-green-500/10 text-green-400 px-2.5 py-0.5 rounded-full font-semibold border border-green-500/20">
+                            Verified User
+                          </span>
+                        )}
+                      </div>
+                    </Card>
+                  </motion.div>
+                ))
+              : !loading && (
+                  <div className="col-span-full text-center py-16 text-silver/50">
+                    No customer reviews found for this filter.
+                  </div>
+                )}
+          </div>
         </div>
-      </Section>
+      </BackgroundSection>
     </main>
   );
 }

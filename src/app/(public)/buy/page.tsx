@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import { ShoppingCart, Minus, Plus, Check, Shield, Truck, Star } from 'lucide-react';
+import Image from 'next/image';
 import { Section, SectionHeading, Card, CTAButton } from '@/components/public/Sections';
 
 interface Product {
@@ -127,11 +128,22 @@ export default function BuyPage() {
   return (
     <main>
       {/* Product Hero */}
-      <section className="relative py-20 bg-gradient-to-b from-navy via-midnight to-navy overflow-hidden">
-        <div className="absolute inset-0 opacity-[0.04] bg-[url('/images/mountain-pattern.svg')] bg-repeat" />
-        <div className="absolute top-0 right-1/4 w-[350px] h-[350px] bg-aurora/10 rounded-full blur-[120px]" />
+      <section className="relative py-24 lg:py-32 bg-navy overflow-hidden">
+        {/* Luxury Kitchen Island Background Image */}
+        <div className="absolute inset-0 z-0 pointer-events-none">
+          <Image
+            src="/images/bgs/buy-product.png"
+            alt="Luxury Home Kitchen Countertop"
+            fill
+            priority
+            sizes="100vw"
+            quality={90}
+            className="object-cover object-center opacity-35"
+          />
+        </div>
+        <div className="absolute inset-0 bg-gradient-to-b from-navy/90 via-deep/85 to-navy z-[1] pointer-events-none" />
 
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           {/* Breadcrumb */}
           <nav className="flex items-center gap-2 text-sm text-silver/50 mb-8">
             <span className="hover:text-silver transition-colors cursor-pointer">Home</span>
